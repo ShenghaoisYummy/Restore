@@ -6,14 +6,10 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/API.runtimeconfig.json
 /Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/API.dll
 /Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/API.pdb
-/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
-/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/Microsoft.OpenApi.dll
-/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.csproj.AssemblyReference.cache
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.GeneratedMSBuildEditorConfig.editorconfig
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.AssemblyInfoInputs.cache
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.AssemblyInfo.cs
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.csproj.CoreCompileInputs.cache
-/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.MvcApplicationPartsAssemblyInfo.cs
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.MvcApplicationPartsAssemblyInfo.cache
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.sourcelink.json
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/scopedcss/bundle/API.styles.css
@@ -26,7 +22,6 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.API.props
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.API.props
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/staticwebassets.pack.json
-/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.csproj.Up2Date
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.dll
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/refint/API.dll
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.pdb

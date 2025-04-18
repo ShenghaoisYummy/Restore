@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MAdK8/ApGfs=",
+  "dgSpecHash": "9tTAqmCKmXs=",
   "success": true,
   "projectFilePath": "/Users/shenghaoxu/Projects/practice/Restore/API/API.csproj",
-  "expectedPackageFiles": [
-    "/Users/shenghaoxu/.nuget/packages/microsoft.aspnetcore.openapi/9.0.3/microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
-    "/Users/shenghaoxu/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }
