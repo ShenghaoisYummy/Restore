@@ -6,7 +6,18 @@ namespace API.Data;
 
 public class DbInitializer
 {
-    private void SeedData(StoreContext context)
+
+    public static void InitDb(WebApplication app)
+    {
+
+        using var scope = app.Services.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<StoreContext>()
+            ?? throw new InvalidOperationException("StoreContext failed to initialize");
+
+        SeedData(context);
+    }
+    private static void SeedData(StoreContext context)
     {
         context.Database.Migrate();
 

@@ -25,4 +25,6 @@ app.UseCors(opt =>
 // Configure the HTTP request pipeline.
 app.MapControllers();
 
+DbInitializer.InitDb(app);
+
 app.Run();
