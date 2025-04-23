@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Product } from "../models/product";
 import Catalog from "../../features/catalog/Catalog";
+import { Container, Typography } from "@mui/material";
 
 function App() {
   const [products, setProduct] = useState<Product[]>([]);
@@ -28,9 +29,10 @@ function App() {
   };
 
   return (
-    <div style={{ fontSize: "1.2rem" }}>
+    <Container maxWidth="xl">
+      <Typography variant="h4">Re-store</Typography>
       <Catalog products={products} addProduct={addProduct} />
-    </div>
+    </Container>
   );
 }
 

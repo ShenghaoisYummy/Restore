@@ -1,4 +1,5 @@
 import { Product } from "../../app/models/product";
+import { Button } from "@mui/material";
 
 interface Props {
   products: Product[];
@@ -16,7 +17,9 @@ export default function Catalog({ products, addProduct }: Props) {
           </li>
         ))}
       </ul>
-      <button onClick={addProduct}>Add Product</button>
+      <Button variant="contained" onClick={addProduct}>
+        Add Product
+      </Button>
     </>
   );
 }
