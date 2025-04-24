@@ -20,7 +20,7 @@ app.UseCors(opt =>
 {
     opt.AllowAnyHeader()
        .AllowAnyMethod()
-       .WithOrigins("http://localhost:3000");
+       .WithOrigins("https://localhost:5173");
 });
 // Configure the HTTP request pipeline.
 app.MapControllers();
