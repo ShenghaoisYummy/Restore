@@ -14,7 +14,16 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   return (
-    <Card elevation={3}>
+    <Card
+      elevation={3}
+      sx={{
+        width: 280,
+        borderRadius: 2,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       <CardMedia
         sx={{ height: 240, backgroundSize: "cover" }}
         image={product.pictureUrl}
@@ -25,11 +34,10 @@ export default function ProductCard({ product }: Props) {
           gutterBottom
           sx={{ textTransform: "uppercase" }}
           variant="subtitle2"
-          component="div"
         >
           {product.name}
         </Typography>
-        <Typography variant="h5" sx={{ color: "secondary.main" }}>
+        <Typography variant="h6" sx={{ color: "secondary.main" }}>
           ${(product.price / 100).toFixed(2)}
         </Typography>
       </CardContent>
