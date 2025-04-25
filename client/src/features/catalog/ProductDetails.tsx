@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
 import { Product } from "../../app/models/product";
 import { useParams } from "react-router-dom";
+import {
+  Grid2,
+  Typography,
+  Divider,
+  TableContainer,
+  Table,
+  TableBody,
+  TextField,
+  Button,
+} from "@mui/material";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -13,5 +23,45 @@ export default function ProductDetails() {
       .catch((error) => console.log(error));
   }, [id]);
 
-  return <div>{product?.name}</div>;
+  if (!product) return <div>Loading</div>;
+
+  return (
+    <Grid2 container spacing={6} maxWidth="lg">
+      <Grid2 size={6}>
+        <img
+          src={product.pictureUrl}
+          alt={product.name}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </Grid2>
+      <Grid2 size={6}>
+        <Typography variant="h3">{product.name}</Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Typography variant="h4" color="secondary">
+          ${product.price}
+        </Typography>
+        <TableContainer>
+          <Table>
+            <TableBody>Table gose here</TableBody>
+          </Table>
+        </TableContainer>
+        <Grid2 container spacing={2} marginTop={3}>
+          <Grid2 size={6}>
+            <TextField
+              variant="outlined"
+              type="number"
+              label="Quantity in Cart"
+              fullWidth
+              defaultValue={1}
+            />
+          </Grid2>
+          <Grid2 size={6}>
+            <Button color="primary" variant="contained" size="large" fullWidth>
+              Add to cart
+            </Button>
+          </Grid2>
+        </Grid2>
+      </Grid2>
+    </Grid2>
+  );
 }
