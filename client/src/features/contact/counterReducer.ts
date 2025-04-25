@@ -6,6 +6,15 @@ const initialState: CounterState = {
   data: 42,
 };
 
-export default function counterReducer(state = initialState) {
+export default function counterReducer(
+  state = initialState,
+  action: { type: string }
+) {
+  switch (action.type) {
+    case "increment":
+      return { ...state, data: state.data + 1 };
+    case "decrement":
+      return { ...state, data: state.data - 1 };
+  }
   return state;
 }
