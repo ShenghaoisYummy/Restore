@@ -1,14 +1,5 @@
-import { useEffect, useState } from "react";
-import { Product } from "../models/product";
-import Catalog from "../../features/catalog/Catalog";
-import {
-  Container,
-  Typography,
-  Button,
-  Box,
-  createTheme,
-  CssBaseline,
-} from "@mui/material";
+import { useState } from "react";
+import { Container, Box, createTheme, CssBaseline } from "@mui/material";
 import NavBar from "./NavBar";
 import { ThemeProvider } from "@mui/material/styles";
 import { Outlet } from "react-router-dom";
