@@ -13,12 +13,8 @@
         "packagesPath": "/Users/shenghaoxu/.nuget/packages/",
         "outputPath": "/Users/shenghaoxu/Projects/practice/Restore/API/obj/",
         "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/shenghaoxu/.nuget/NuGet/NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net9.0"
-        ],
+        "configFilePaths": ["/Users/shenghaoxu/.nuget/NuGet/NuGet.Config"],
+        "originalTargetFrameworks": ["net9.0"],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -29,9 +25,7 @@
           }
         },
         "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
+          "warnAsError": ["NU1605"]
         },
         "restoreAuditProperties": {
           "enableAudit": "true",
