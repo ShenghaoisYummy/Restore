@@ -14,6 +14,7 @@ export default function AboutPage() {
   const [trigger404Error] = useLazyGet404ErrorQuery();
   const [trigger500Error] = useLazyGet500ErrorQuery();
   const [triggerValidationError] = useLazyGetValidationErrorQuery();
+  
   return (
     <Container maxWidth="lg">
       <Typography gutterBottom variant="h2"></Typography>

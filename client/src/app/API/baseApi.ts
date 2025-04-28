@@ -4,7 +4,9 @@ import {
   FetchArgs,
 } from "@reduxjs/toolkit/query/react";
 import { startLoading, stopLoading } from "../layout/uiSlice";
-export const baseUrl = "https://localhost:5001/api";
+import { toast } from "react-toastify";
+
+const baseUrl = "https://localhost:5001/api";
 
 const customBaseQuery = fetchBaseQuery({
   baseUrl: baseUrl,
@@ -27,8 +29,30 @@ export const baseQueryWithErrorHandling = async (
   api.dispatch(stopLoading());
 
   if (result.error) {
-    const { status, data } = result.error;
-    console.log({ status, data });
+    const originalStatus =
+      result.error.status === "PARSING_ERROR"
+        ? result.error.originalStatus
+        : result.error.status;
+
+    const errorData = result.error.data;
+    console.log(errorData);
+
+    switch (originalStatus) {
+      case 400:
+        toast.error(errorData as string);
+        break;
+      case 401:
+        toast.error(errorData as string);
+        break;
+      case 404:
+        toast.error(errorData as string);
+        break;
+      case 500:
+        toast.error(errorData as string);
+        break;
+      default:
+        break;
+    }
   }
 
   return result;
