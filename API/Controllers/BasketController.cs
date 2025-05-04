@@ -21,4 +21,16 @@ public class BasketController(StoreContext context) : BaseApiController
 
     }
 
+    [HttpPost]
+    public async Task<ActionResult> AddItemToBasket(int productId, int quantity)
+    {
+        return StatusCode(201);
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> RemoveBasketItem(int productId, int quantity)
+    
+    {
+        return StatusCode(201);
+    }
 }
