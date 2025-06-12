@@ -4,35 +4,25 @@ using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using API.Extentsions;
 
 namespace API.Controllers;
 
 public class BasketController(StoreContext context) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<BasketDto>> GetBseket()
+    public async Task<ActionResult<BasketDto>> GetBasket()
     {
         var basket = await RetrieveBasket();
 
         if (basket == null) return NoContent();
-        return new BasketDto
-        {
-            BasketId = basket.BasketId,
-            Items = basket.Items.Select(item => new BasketItemDto
-            {
-                ProductId = item.ProductId,
-                Name = item.Product.Name,
-                PictureUrl = item.Product.PictureUrl,
-                Price = item.Product.Price,
-                Brand = item.Product.Brand,
-                Type = item.Product.Type,
-                Quantity = item.Quantity
-            }).ToList()
-        };
+
+        return basket.ToDto();
+
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddItemToBasket(int productId, int quantity)
+    public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
     {
         var basket = await RetrieveBasket();
 
@@ -46,7 +36,7 @@ public class BasketController(StoreContext context) : BaseApiController
 
         var result = await context.SaveChangesAsync() > 0;
 
-        if (result) return CreatedAtAction(nameof(GetBseket), basket);
+        if (result) return CreatedAtAction(nameof(GetBasket), basket.ToDto());
 
         return BadRequest("Problem adding item to basket");
     }
