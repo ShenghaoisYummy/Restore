@@ -7,4 +7,4 @@ export default function BasketPage() {
   if (!data) return <Typography variant="h3">Basket is empty</Typography>;
 
   return <div>{data.basketId}</div>;
-}
+} 

@@ -20,7 +20,7 @@ export const basketApi = createApi({
     }),
     removeBasketItem: builder.mutation<
       void,
-      { productId: number; quantity: number } 
+      { productId: number; quantity: number }
     >({
       query: ({ productId, quantity }) => ({
         url: `basket?productId=${productId}&quantity=${quantity}`,
@@ -30,4 +30,8 @@ export const basketApi = createApi({
   }),
 });
 
-export const { useFetchBasketQuery } = basketApi;
+export const {
+  useFetchBasketQuery,
+  useAddBasketItemMutation,
+  useRemoveBasketItemMutation,
+} = basketApi;
