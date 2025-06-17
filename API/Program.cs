@@ -22,7 +22,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(opt =>
 {
     opt.AllowAnyHeader()
-       .AllowAnyMethod()
+       .AllowAnyMethod().AllowCredentials()
        .WithOrigins("https://localhost:5173");
 });
 // Configure the HTTP request pipeline.
