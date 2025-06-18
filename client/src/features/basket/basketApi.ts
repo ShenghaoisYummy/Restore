@@ -1,6 +1,7 @@
 import { baseQueryWithErrorHandling } from "../../app/API/baseApi";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { Basket } from "../../app/models/basket";
+import { Basket, Item } from "../../app/models/basket";
+import { Product } from "../../app/models/product";
 
 export const basketApi = createApi({
   reducerPath: "basketApi",
@@ -13,18 +14,34 @@ export const basketApi = createApi({
     }),
     addBasketItem: builder.mutation<
       Basket,
-      { productId: number; quantity: number }
+      { product: Product; quantity: number }
     >({
-      query: ({ productId, quantity }) => ({
-        url: `basket?productId=${productId}&quantity=${quantity}`,
+      query: ({ product, quantity }) => ({
+        url: `basket?productId=${product.id}&quantity=${quantity}`,
         method: "POST",
       }),
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (
+        { product, quantity },
+        { dispatch, queryFulfilled }
+      ) => {
+        const patchResult = dispatch(
+          basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+            const existingItem = draft.items.find(
+              (item) => item.productId === product.id
+            );
+            if (existingItem) {
+              existingItem.quantity += quantity;
+            } else {
+              draft.items.push(new Item(product, quantity));
+            }
+          })
+        );
         try {
           await queryFulfilled;
           dispatch(basketApi.util.invalidateTags(["Basket"]));
         } catch (error) {
           console.log(error);
+          patchResult.undo();
         }
       },
     }),
