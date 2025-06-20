@@ -35,8 +35,11 @@ public class Basket
 
         if (item == null) return;
 
-        if (item.Quantity <= 0) Items.Remove(item);
-        else item.Quantity -= quantity;
+        item.Quantity -= quantity;
+        if (item.Quantity <= 0) 
+        {
+            Items.Remove(item);
+        }
     }
 
 

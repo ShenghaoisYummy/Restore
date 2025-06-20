@@ -53,6 +53,33 @@ export const basketApi = createApi({
         url: `basket?productId=${productId}&quantity=${quantity}`,
         method: "DELETE",
       }),
+      onQueryStarted: async (
+        { productId, quantity },
+        { dispatch, queryFulfilled }
+      ) => {
+        const patchResult = dispatch(
+          basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+            const existingItem = draft.items.find(
+              (item) => item.productId === productId
+            );
+            if (existingItem) {
+              existingItem.quantity -= quantity;
+              if (existingItem.quantity <= 0) {
+                draft.items = draft.items.filter(
+                  (item) => item.productId !== productId
+                );
+              }
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+          dispatch(basketApi.util.invalidateTags(["Basket"]));
+        } catch (error) {
+          console.log(error);
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });
