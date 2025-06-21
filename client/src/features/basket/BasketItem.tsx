@@ -6,6 +6,7 @@ import {
   useAddBasketItemMutation,
   useRemoveBasketItemMutation,
 } from "./basketApi";
+import { currencyFormat } from "../../lib/util";
 
 interface Props {
   item: Item;
@@ -44,10 +45,10 @@ export default function BasketItem({ item }: Props) {
           <Typography variant="h6">{item.name}</Typography>
           <Box display="flex" alignItems="center" gap={3}>
             <Typography sx={{ fontSize: "1.1rem" }}>
-              ${((item.price / 100) * item.quantity).toFixed(2)}
+              {currencyFormat(item.price * item.quantity)}
             </Typography>
             <Typography sx={{ fontSize: "1.1rem" }} color="primary">
-              ${((item.price / 100) * item.quantity).toFixed(2)}
+              {currencyFormat(item.price * item.quantity)}
             </Typography>
           </Box>
 
