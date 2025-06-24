@@ -8,7 +8,8 @@ export default function BasketPage() {
 
   if (isLoading) return <Typography variant="h3">Loading basket...</Typography>;
 
-  if (!data) return <Typography variant="h3">Basket is empty</Typography>;
+  if (!data || data.items.length === 0)
+    return <Typography variant="h3">Basket is empty</Typography>;
 
   return (
     <Grid2 container spacing={2}>
