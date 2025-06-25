@@ -34,26 +34,36 @@ export const basketApi = createApi({
         { product, quantity },
         { dispatch, queryFulfilled }
       ) => {
+        let isNewBasket = false;
         const patchResult = dispatch(
           basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
             const productId = isBasketItem(product)
               ? product.productId
               : product.id;
-            const existingItem = draft.items.find(
-              (item) => item.productId === productId
-            );
-            if (existingItem) {
-              existingItem.quantity += quantity;
-            } else {
-              draft.items.push(
-                isBasketItem(product) ? product : new Item(product, quantity)
+            if (!draft?.items || draft.items.length === 0) {
+              isNewBasket = true;
+            }
+            if (!isNewBasket) {
+              const existingItem = draft.items.find(
+                (item) => item.productId === productId
               );
+              if (existingItem) {
+                existingItem.quantity += quantity;
+              } else {
+                draft.items.push(
+                  isBasketItem(product)
+                    ? product
+                    : { ...product, productId: product.id, quantity }
+                );
+              }
             }
           })
         );
         try {
           await queryFulfilled;
-          dispatch(basketApi.util.invalidateTags(["Basket"]));
+          if (isNewBasket) {
+            dispatch(basketApi.util.invalidateTags(["Basket"]));
+          }
         } catch (error) {
           console.log(error);
           patchResult.undo();
