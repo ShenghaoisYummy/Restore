@@ -33,7 +33,7 @@ export const basketApi = createApi({
       onQueryStarted: async (
         { product, quantity },
         { dispatch, queryFulfilled }
-      ) => {
+      ) => { 
         let isNewBasket = false;
         const patchResult = dispatch(
           basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
