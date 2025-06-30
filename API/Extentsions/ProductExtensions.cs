@@ -16,4 +16,17 @@ public static class ProductExtensions
         };
         return query;
     }
+
+    public static IQueryable<Product> Search(this IQueryable<Product> query, string? SearchTerm)
+    {   
+        // if the search term is null or empty, return the original query
+        if (string.IsNullOrEmpty(SearchTerm)) return query;
+        // convert the serach term to lower case
+        var lowerCaseSearchTerm = SearchTerm.Trim().ToLower();
+
+        
+        return query.Where(x => x.Name.ToLower().Contains(lowerCaseSearchTerm));
+    }
+
 }
+
