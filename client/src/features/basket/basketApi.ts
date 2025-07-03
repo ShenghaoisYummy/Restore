@@ -47,7 +47,7 @@ export const basketApi = createApi({
               const existingItem = draft.items.find(
                 (item) => item.productId === productId
               );
-              if (existingItem) {
+              if (existingItem) { 
                 existingItem.quantity += quantity;
               } else {
                 draft.items.push(
