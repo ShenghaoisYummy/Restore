@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Extensions;
 using API.RequestHelpers;
+using API.Extentsions;
 
 namespace API.Controllers
 {
@@ -16,9 +17,16 @@ namespace API.Controllers
         {
 
             var query = context.Products
-            .Sort(productParams.OrderBy).Search(productParams.SearchTerm).Filter(productParams.Brands, productParams.Types).AsQueryable();
+            .Sort(productParams.OrderBy).
+            Search(productParams.SearchTerm).
+            Filter(productParams.Brands, productParams.Types).
+            AsQueryable();
 
-            return await query.ToListAsync();
+            var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+
+            Response.AddPaginationHeader(products.Metadata);
+            
+            return products;
 
         }
 
