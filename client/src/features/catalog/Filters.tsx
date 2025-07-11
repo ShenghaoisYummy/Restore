@@ -5,10 +5,10 @@ import {
   FormControlLabel,
   Paper,
   Radio,
-  TextField,
   Checkbox,
   FormGroup,
 } from "@mui/material";
+import Search from "./Search";
 
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
@@ -21,7 +21,7 @@ export default function Filters() {
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Paper>
-        <TextField label="Search" variant="outlined" fullWidth />
+        <Search />
       </Paper>
       <Paper sx={{ p: 3 }}>
         <FormControl>
@@ -36,14 +36,17 @@ export default function Filters() {
         </FormControl>
       </Paper>
       <Paper sx={{ p: 3 }}>
-          <FormGroup>
-            {data && data.brands.map(item =>(
-                <FormControlLabel
+        <FormGroup>
+          {data &&
+            data.brands.map((item) => (
+              <FormControlLabel
                 key={item}
-                control={<Checkbox color = "secondary" sx={{py: 0.7, fontSize: 40}}/>}
+                control={
+                  <Checkbox color="secondary" sx={{ py: 0.7, fontSize: 40 }} />
+                }
                 label={item}
-            />
-          ))}
+              />
+            ))}
         </FormGroup>
       </Paper>
     </Box>
