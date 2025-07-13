@@ -9,6 +9,9 @@ import {
   FormGroup,
 } from "@mui/material";
 import Search from "./Search";
+import { useAppSelector, useAppDispatch } from "../../app/store/store";
+import RadioButtonGroup from "../../app/shared/RadioButtonGroup";
+import { setOrderBy } from "./catalogSlice";
 
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
@@ -18,22 +21,19 @@ const sortOptions = [
 
 export default function Filters() {
   const { data } = useFetchFiltersQuery();
+  const { orderBy } = useAppSelector((state) => state.catalog);
+  const dispatch = useAppDispatch();
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Paper>
         <Search />
       </Paper>
       <Paper sx={{ p: 3 }}>
-        <FormControl>
-          {sortOptions.map(({ value, label }) => (
-            <FormControlLabel
-              key={label}
-              control={<Radio sx={{ py: 0.7 }} />}
-              label={label}
-              value={value}
-            />
-          ))}
-        </FormControl>
+        <RadioButtonGroup
+          options={sortOptions}
+          onChange={(e) => dispatch(setOrderBy(e.target.value))}
+          selectedValue={orderBy}
+        />
       </Paper>
       <Paper sx={{ p: 3 }}>
         <FormGroup>
