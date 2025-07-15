@@ -1,17 +1,10 @@
 import { useFetchFiltersQuery } from "./catalogApi";
-import {
-  Box,
-  FormControl,
-  FormControlLabel,
-  Paper,
-  Radio,
-  Checkbox,
-  FormGroup,
-} from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import Search from "./Search";
 import { useAppSelector, useAppDispatch } from "../../app/store/store";
 import RadioButtonGroup from "../../app/shared/RadioButtonGroup";
-import { setOrderBy } from "./catalogSlice";
+import { setBrands, setOrderBy, setTypes } from "./catalogSlice";
+import CheckboxButtons from "../../app/shared/components/CheckboxButtons";
 
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
@@ -21,8 +14,12 @@ const sortOptions = [
 
 export default function Filters() {
   const { data } = useFetchFiltersQuery();
-  const { orderBy } = useAppSelector((state) => state.catalog);
+  const { orderBy, brands, types } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
+
+  if (!data?.brands || !data?.types)
+    return <Typography variant="h6">Loading...</Typography>;
+
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Paper>
@@ -36,18 +33,18 @@ export default function Filters() {
         />
       </Paper>
       <Paper sx={{ p: 3 }}>
-        <FormGroup>
-          {data &&
-            data.brands.map((item) => (
-              <FormControlLabel
-                key={item}
-                control={
-                  <Checkbox color="secondary" sx={{ py: 0.7, fontSize: 40 }} />
-                }
-                label={item}
-              />
-            ))}
-        </FormGroup>
+        <CheckboxButtons
+          items={data?.brands}
+          checked={brands}
+          onChange={(items: string[]) => dispatch(setBrands(items))}
+        />
+      </Paper>
+      <Paper sx={{ p: 3 }}>
+        <CheckboxButtons
+          items={data?.types}
+          checked={types}
+          onChange={(items: string[]) => dispatch(setTypes(items))}
+        />
       </Paper>
     </Box>
   );
