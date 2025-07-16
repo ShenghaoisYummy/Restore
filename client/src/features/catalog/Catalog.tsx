@@ -3,6 +3,7 @@ import { useFetchProductsQuery } from "./catalogApi";
 import ProductList from "./ProductList";
 import Filters from "./Filters";
 import { useAppSelector } from "../../app/store/store";
+import Pagination from "@mui/material/Pagination";
 
 export default function Catalog() {
   const productParams = useAppSelector((state) => state.catalog);
@@ -17,7 +18,13 @@ export default function Catalog() {
         <Filters />
       </Grid2>
       <Grid2 size={9}>
-        <ProductList products={data} />
+        <ProductList products={data.items} />
+        <Pagination
+          color="secondary"
+          size="large"
+          count={data.pagination.totalPages}
+          page={data.pagination.currentPage}
+        />
       </Grid2>
     </Grid2>
   );
