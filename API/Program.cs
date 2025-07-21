@@ -14,6 +14,12 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 builder.Services.AddCors();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
+builder.Services.AddIdentityCore<User>(opt =>{
+    opt.User.RequireUniqueEmail = true;
+}).AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<StoreContext>();
+
+
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
@@ -26,7 +32,12 @@ app.UseCors(opt =>
        .WithOrigins("https://localhost:5173");
 });
 // Configure the HTTP request pipeline.
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<User>(); //api/identity
 
 DbInitializer.InitDb(app);
 
