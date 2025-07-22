@@ -1,7 +1,8 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Middleware;
-
+using API.Entities;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,7 +15,8 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 builder.Services.AddCors();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
-builder.Services.AddIdentityCore<User>(opt =>{
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
     opt.User.RequireUniqueEmail = true;
 }).AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<StoreContext>();
