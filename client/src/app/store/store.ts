@@ -9,7 +9,7 @@ import { catalogSlice } from "../../features/catalog/catalogSlice";
 import { accountApi } from "../../features/account/accountApi";
 export const store = configureStore({
   reducer: {
-    [catalogApi.reducerPath]: catalogApi.reducer,
+    [catalogApi.reducerPath]: catalogApi.reducer, 
     [errorApi.reducerPath]: errorApi.reducer,
     counter: counterSlice.reducer,
     ui: uiSlice.reducer,
