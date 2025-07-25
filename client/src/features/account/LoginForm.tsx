@@ -8,8 +8,20 @@ import {
   Typography,
 } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
+import { useForm } from "react-hook-form";
+import { LoginSchema } from "../../lib/schemas/loginSchema";
 
 export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>();
+
+  const onSubmit = (data: LoginSchema) => {
+    console.log(data);
+  };
+
   return (
     <Container component={Paper} maxWidth="sm" sx={{ borderRadius: 4, p: 4 }}>
       <Box
@@ -22,14 +34,29 @@ export default function LoginForm() {
         <Typography variant="h5">Login</Typography>
         <Box
           component="form"
+          onSubmit={handleSubmit(onSubmit)}
           width="100%"
           display="flex"
           flexDirection="column"
           gap={3}
           marginY={3}
         >
-          <TextField fullWidth label="Email" type="email" />
-          <TextField fullWidth label="Password" type="password" />
+          <TextField
+            fullWidth
+            label="Email"
+            type="email"
+            {...register("email", { required: "Email is required" })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            {...register("password", { required: "Password is required" })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
           <Button variant="contained" color="primary" type="submit">
             Login
           </Button>
