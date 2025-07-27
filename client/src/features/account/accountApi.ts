@@ -1,13 +1,14 @@
 import { baseQueryWithErrorHandling } from "../../app/API/baseApi";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { User } from "../../app/models/user";
+import { LoginSchema } from "../../lib/schemas/loginSchema";
 
 // create the accountApi
 export const accountApi = createApi({
   reducerPath: "accountApi",
   baseQuery: baseQueryWithErrorHandling,
   endpoints: (builder) => ({
-    login: builder.mutation<void, object>({
+    login: builder.mutation<void, LoginSchema>({
       query: (creds) => {
         return {
           url: "login?useCookies=true",

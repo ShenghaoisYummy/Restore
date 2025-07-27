@@ -9,17 +9,27 @@ import {
 } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import { LoginSchema } from "../../lib/schemas/loginSchema";
+import { loginSchema, LoginSchema } from "../../lib/schemas/loginSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLoginMutation } from "./accountApi";
 
 export default function LoginForm() {
+  const [login, { isLoading }] = useLoginMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginSchema>();
+  } = useForm<LoginSchema>({
+    mode: "onTouched",
+    resolver: zodResolver(loginSchema),
+  });
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      await login(data).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -45,7 +55,7 @@ export default function LoginForm() {
             fullWidth
             label="Email"
             type="email"
-            {...register("email", { required: "Email is required" })}
+            {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
           />
@@ -53,11 +63,16 @@ export default function LoginForm() {
             fullWidth
             label="Password"
             type="password"
-            {...register("password", { required: "Password is required" })}
+            {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
           />
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            disabled={isLoading}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
             Login
           </Button>
           <Typography sx={{ textAlign: "center" }}>
