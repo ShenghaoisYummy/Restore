@@ -7,6 +7,7 @@ import { LoginSchema } from "../../lib/schemas/loginSchema";
 export const accountApi = createApi({
   reducerPath: "accountApi",
   baseQuery: baseQueryWithErrorHandling,
+  tagTypes: ["UserInfo"],
   endpoints: (builder) => ({
     login: builder.mutation<void, LoginSchema>({
       query: (creds) => {
@@ -15,6 +16,14 @@ export const accountApi = createApi({
           method: "POST",
           body: creds,
         };
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(accountApi.util.invalidateTags(["UserInfo"]));
+        } catch (error) {
+          console.log(error);
+        }
       },
     }),
     register: builder.mutation<void, object>({
@@ -32,6 +41,7 @@ export const accountApi = createApi({
           url: "account/userInfo",
         };
       },
+      providesTags: ["UserInfo"],
     }),
     logout: builder.mutation<void, void>({
       query: () => {
@@ -39,6 +49,14 @@ export const accountApi = createApi({
           url: "account/logout",
           method: "POST",
         };
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(accountApi.util.invalidateTags(["UserInfo"]));
+        } catch (error) {
+          console.log(error);
+        }
       },
     }),
   }),

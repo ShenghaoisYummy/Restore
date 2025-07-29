@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { loginSchema, LoginSchema } from "../../lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "./accountApi";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [login, { isLoading }] = useLoginMutation();
@@ -24,9 +25,12 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data: LoginSchema) => {
     try {
       await login(data).unwrap();
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
