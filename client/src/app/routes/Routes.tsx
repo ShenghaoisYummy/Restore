@@ -8,6 +8,7 @@ import ProductDetails from "../../features/catalog/ProductDetails";
 import BasketPage from "../../features/basket/BasketPage";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import LoginForm from "../../features/account/LoginForm";
+import RegisterForm from "../../features/account/RegisterForm";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: "/contact", element: <ContactPage /> },
       { path: "/checkout", element: <CheckoutPage /> },
       { path: "/login", element: <LoginForm /> },
+      { path: "/register", element: <RegisterForm /> },
     ],
   },
 ]);

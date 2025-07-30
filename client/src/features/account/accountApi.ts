@@ -2,6 +2,8 @@ import { baseQueryWithErrorHandling } from "../../app/API/baseApi";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { User } from "../../app/models/user";
 import { LoginSchema } from "../../lib/schemas/loginSchema";
+import { toast } from "react-toastify";
+import { router } from "../../app/routes/Routes";
 
 // create the accountApi
 export const accountApi = createApi({
@@ -33,6 +35,19 @@ export const accountApi = createApi({
           method: "POST",
           body: creds,
         };
+      },
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          // queryFulfilled is a promise that resolves when the query is fulfilled
+          // await queryFulfilled is used to wait for the query to be fulfilled
+          // toast.success is used to show a success message
+          // router.navigate is used to navigate to the login page
+          await queryFulfilled;
+          toast.success("Registration successful");
+          router.navigate("/login");
+        } catch (error) {
+          console.log(error);
+        }
       },
     }),
     userInfo: builder.query<User, void>({
