@@ -25,7 +25,14 @@ export default function UserMenu({ user }: Props) {
 
   return (
     <div>
-      <Button onClick={handleClick}>{user.email}</Button>
+      <Button
+        onClick={handleClick}
+        color="inherit"
+        size="large"
+        sx={{ fontSize: "1.2rem" }}
+      >
+        {user.email}
+      </Button>
       <Menu
         id="fade-menu"
         slotProps={{

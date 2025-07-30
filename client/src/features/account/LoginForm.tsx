@@ -11,11 +11,20 @@ import { LockOutlined } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { loginSchema, LoginSchema } from "../../lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLoginMutation } from "./accountApi";
-import { useNavigate } from "react-router-dom";
+import { useLazyUserInfoQuery, useLoginMutation } from "./accountApi";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [login, { isLoading }] = useLoginMutation();
+  const location = useLocation();
+
+  // get the fetchUserInfo function from the useLazyUserInfoQuery hook
+  // this function is used to fetch the user info from the api
+  // it is a lazy query, so it will not be executed until we call it
+  // we need to call it after the login is successful
+  // to get the user info and store it in the redux store
+  const [fetchUserInfo] = useLazyUserInfoQuery();
+
   const {
     register,
     handleSubmit,
@@ -30,7 +39,8 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
     try {
       await login(data).unwrap();
-      navigate("/");
+      await fetchUserInfo().unwrap();
+      navigate(location.state?.from || "/catalog");
     } catch (error) {
       console.log(error);
     }

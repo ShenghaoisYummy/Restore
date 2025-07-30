@@ -82,4 +82,5 @@ export const {
   useRegisterMutation,
   useUserInfoQuery,
   useLogoutMutation,
+  useLazyUserInfoQuery,
 } = accountApi;

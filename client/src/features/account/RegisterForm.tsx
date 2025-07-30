@@ -17,10 +17,10 @@ import {
 import { LockOutlined } from "@mui/icons-material";
 
 function RegisterForm() {
+
   // get the register trigger function
   // from the useRegisterMutation hook RTK Query
   // in the accountApi reducer
-
   const [registerUser] = useRegisterMutation();
 
   // get register, handleSubmit, errors, isValid from the useForm hook
@@ -44,7 +44,6 @@ function RegisterForm() {
   // <RegisterSchema> is the type of the form data for the compile time type checking
   // zodResolver is used to integrate the Zod schema with react-hook-form
   // registerSchema defines validation rules for email and password fields
-
   const {
     register,
     handleSubmit,
@@ -58,7 +57,6 @@ function RegisterForm() {
   // onSubmit is the function that is triggered when the form is submitted
   // data is the form data
   // registerUser is the trigger function for the register mutation
-
   const onSubmit = async (data: RegisterSchema) => {
     try {
       await registerUser(data).unwrap();
