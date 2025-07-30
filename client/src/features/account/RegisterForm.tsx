@@ -48,6 +48,7 @@ function RegisterForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isValid, isLoading },
   } = useForm<RegisterSchema>({
     mode: "onTouched",
@@ -59,7 +60,30 @@ function RegisterForm() {
   // registerUser is the trigger function for the register mutation
 
   const onSubmit = async (data: RegisterSchema) => {
-    await registerUser(data);
+    try {
+      await registerUser(data).unwrap();
+    } catch (error) {
+      const apiError = error as { message: string };
+      // check if the error message exist and it is a string
+      if (apiError.message && typeof apiError.message === "string") {
+        // split the error message into an array of errors
+        const errorArray = apiError.message.split(",");
+        // loop through the error array
+        errorArray.forEach((error) => {
+          // check if the error message includes "Email"
+          if (error.includes("Email")) {
+            //The setError function manually adds an error message to a specific form field,
+            // which will then be displayed in your UI.
+
+            // set the error for the email field
+            setError("email", { message: error });
+          } else if (error.includes("Password")) {
+            // set the error for the password field
+            setError("password", { message: error });
+          }
+        });
+      }
+    }
   };
 
   return (
