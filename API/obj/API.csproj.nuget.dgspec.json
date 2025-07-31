@@ -59,6 +59,10 @@
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[9.0.4, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[45.11.0, )"
             }
           },
           "imports": [

@@ -1,4 +1,5 @@
 using API.Data;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 using API.Middleware;
 using API.Entities;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 
 builder.Services.AddCors();
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddScoped<PaymentsService>();
 
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {

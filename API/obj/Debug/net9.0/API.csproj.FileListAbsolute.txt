@@ -151,3 +151,16 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.pdb
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/API.genruntimeconfig.cache
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/ref/API.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/Microsoft.Win32.SystemEvents.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/Newtonsoft.Json.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/Stripe.net.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/System.Configuration.ConfigurationManager.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/System.Drawing.Common.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/System.Security.Cryptography.ProtectedData.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/System.Security.Permissions.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/System.Windows.Extensions.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/unix/lib/net6.0/System.Drawing.Common.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Drawing.Common.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
