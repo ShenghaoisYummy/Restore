@@ -54,7 +54,7 @@ namespace API.Services
                 };
                 // update the payment intent
                 await service.UpdateAsync(basket.PaymentIntentId, options);
-            }
+            } 
 
             // return the payment intent
             return intent;
