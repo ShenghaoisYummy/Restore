@@ -29,7 +29,7 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
         return Ok(new { Message = "User registered successfully" });
     }
 
-    [HttpGet("user-info")]
+    [HttpGet("userinfo")]
     public async Task<ActionResult> GetUserInfo()
     {
         // use User.Identity to check if the user is authenticated
