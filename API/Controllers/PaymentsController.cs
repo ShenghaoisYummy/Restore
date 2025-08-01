@@ -32,11 +32,14 @@ public class PaymentsController(PaymentsService paymentsService, StoreContext co
         basket.PaymentIntentId ??= intent.Id;
         basket.ClientSecret ??= intent.ClientSecret;
 
-        // save changes to database
-        var result = await context.SaveChangesAsync() > 0;
 
-        // if result is false, which means the basket is not updated, return bad request
-        if (!result) return BadRequest(new ProblemDetails { Title = "Problem updating basket with intent" });
+        if(context.ChangeTracker.HasChanges())
+        {
+            // save changes to database and return result (boolean)
+            var result = await context.SaveChangesAsync() > 0;
+            // if result is false, which means the basket is not updated, return bad request
+            if (!result) return BadRequest(new ProblemDetails { Title = "Problem updating basket with intent" });
+        } 
 
         // return basket dto
         return basket.ToDto();
