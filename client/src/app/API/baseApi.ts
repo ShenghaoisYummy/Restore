@@ -6,7 +6,7 @@ import {
 import { startLoading, stopLoading } from "../layout/uiSlice";
 import { toast } from "react-toastify";
 
-const baseUrl = "https://localhost:5001/api";
+const baseUrl = import.meta.env.VITE_API_URL;
 
 const customBaseQuery = fetchBaseQuery({
   baseUrl: baseUrl,
