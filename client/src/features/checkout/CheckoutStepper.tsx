@@ -10,6 +10,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import { AddressElement, PaymentElement } from "@stripe/react-stripe-js";
+import Review from "./Review";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
@@ -53,7 +54,7 @@ export default function CheckoutStepper() {
           <PaymentElement />
         </Box>
         <Box sx={{ display: activeStep === 2 ? "block" : "none" }}>
-          ReviewStep
+          <Review />
         </Box>
       </Box>
       <Box display="flex" paddingTop={2} justifyContent={"space-between"}>
