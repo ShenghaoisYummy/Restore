@@ -5,13 +5,43 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { StripeElementsOptions } from "@stripe/stripe-js";
 import { useFetchBasketQuery } from "../../features/basket/basketApi";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { useCreatePaymentIntentMutation } from "./checkoutApi";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
+//1. User visits /checkout
+//    ↓
+// 2. CheckoutPage component loads
+//    ↓
+// 3. useEffect runs → createPaymentIntent() called
+//    ↓
+// 4. API call to POST /api/payments → creates Stripe Payment Intent
+//    ↓
+// 5. onQueryStarted updates basket cache with clientSecret
+//    ↓
+// 6. options becomes valid → Stripe Elements can render
+//    ↓
+// 7. create.current = true → prevents future API calls
 
 export default function CheckoutPage() {
   // fetch current client's basket
   const { data: basket } = useFetchBasketQuery();
+
+  // get the trigger function and the isLoading state from the createPaymentIntent mutation
+  const [createPaymentIntent, { isLoading: isCreatingPaymentIntent }] =
+    useCreatePaymentIntentMutation();
+
+  // create a ref to prevent multiple API calls
+  const create = useRef(false);
+
+  // useEffect to call createPaymentIntent only once when the component mounts
+  useEffect(() => {
+    if (!create.current) {
+      createPaymentIntent();
+      create.current = true;
+    }
+  }, [createPaymentIntent]);
 
   // create stripe options for the client secret if it exists, if not return undefined
   const options: StripeElementsOptions | undefined = useMemo(() => {
@@ -21,12 +51,12 @@ export default function CheckoutPage() {
     };
   }, [basket?.clientSecret]);
 
-  // if stripePromise or options are not defined, show loading message
+  // if stripePromise or options are not defined, or the mutation is loading, show loading message
   // otherwise, render the checkout stepper
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={8}>
-        {!stripePromise || !options ? (
+        {!stripePromise || !options || isCreatingPaymentIntent ? (
           <Typography variant="h3">Loading...</Typography>
         ) : (
           <Elements stripe={stripePromise} options={options}>
