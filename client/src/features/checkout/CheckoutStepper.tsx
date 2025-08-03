@@ -9,7 +9,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { AddressElement } from "@stripe/react-stripe-js";
+import { AddressElement, PaymentElement } from "@stripe/react-stripe-js";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
@@ -42,15 +42,15 @@ export default function CheckoutStepper() {
               mode: "shipping",
             }}
           />
+          <FormControlLabel
+            sx={{ display: "flex", justifyContent: "end" }}
+            control={<Checkbox />}
+            label="save as default address"
+          />
         </Box>
-        <FormControlLabel
-          sx={{ display: "flex", justifyContent: "end" }}
-          control={<Checkbox />}
-          label="save as default address"
-        />
 
         <Box sx={{ display: activeStep === 1 ? "block" : "none" }}>
-          PaymentStep
+          <PaymentElement />
         </Box>
         <Box sx={{ display: activeStep === 2 ? "block" : "none" }}>
           ReviewStep
