@@ -1,9 +1,19 @@
 import { useState } from "react";
-import { Paper, Stepper, Step, StepLabel, Box, Button } from "@mui/material";
+import {
+  Paper,
+  Stepper,
+  Step,
+  StepLabel,
+  Box,
+  Button,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
+import { AddressElement } from "@stripe/react-stripe-js";
+
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
-
-    // set state for active step
+  // set state for active step
   const [activeStep, setActiveStep] = useState(0);
 
   // handle next step function
@@ -27,8 +37,18 @@ export default function CheckoutStepper() {
       </Stepper>
       <Box sx={{ mt: 2 }}>
         <Box sx={{ display: activeStep === 0 ? "block" : "none" }}>
-          AddressStep
+          <AddressElement
+            options={{
+              mode: "shipping",
+            }}
+          />
         </Box>
+        <FormControlLabel
+          sx={{ display: "flex", justifyContent: "end" }}
+          control={<Checkbox />}
+          label="save as default address"
+        />
+
         <Box sx={{ display: activeStep === 1 ? "block" : "none" }}>
           PaymentStep
         </Box>

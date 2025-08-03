@@ -7,8 +7,9 @@ import { StripeElementsOptions } from "@stripe/stripe-js";
 import { useFetchBasketQuery } from "../../features/basket/basketApi";
 import { useEffect, useMemo, useRef } from "react";
 import { useCreatePaymentIntentMutation } from "./checkoutApi";
+import { useAppSelector } from "../../app/store/store";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 //1. User visits /checkout
 //    ↓
@@ -35,6 +36,11 @@ export default function CheckoutPage() {
   // create a ref to prevent multiple API calls
   const create = useRef(false);
 
+  // get the boolean value of darkMode from the ui slice
+  // it means if the current mode is dark, then the theme will be night,
+  // otherwise it will be stripe, which is the default theme
+  const { darkMode } = useAppSelector((state) => state.ui);
+
   // useEffect to call createPaymentIntent only once when the component mounts
   useEffect(() => {
     if (!create.current) {
@@ -48,8 +54,12 @@ export default function CheckoutPage() {
     if (!basket?.clientSecret) return undefined;
     return {
       clientSecret: basket.clientSecret,
+      appearance: {
+        labels: "floating",
+        theme: darkMode ? "night" : "stripe",
+      },
     };
-  }, [basket?.clientSecret]);
+  }, [basket?.clientSecret, darkMode]);
 
   // if stripePromise or options are not defined, or the mutation is loading, show loading message
   // otherwise, render the checkout stepper
