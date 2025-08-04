@@ -1,6 +1,6 @@
 import { baseQueryWithErrorHandling } from "../../app/API/baseApi";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { User } from "../../app/models/user";
+import { Address, User } from "../../app/models/user";
 import { LoginSchema } from "../../lib/schemas/loginSchema";
 import { toast } from "react-toastify";
 import { router } from "../../app/routes/Routes";
@@ -74,6 +74,42 @@ export const accountApi = createApi({
         }
       },
     }),
+    // fetch the user address
+    fetchAddress: builder.query<Address, void>({
+      query: () => {
+        return {
+          url: "account/address",
+        };
+      },
+    }),
+    // update the user address on the server side
+    updateUserAddress: builder.mutation<Address, Address>({
+      query: (address) => {
+        return {
+          url: "account/address",
+          method: "POST",
+          body: address,
+        };
+      },
+      // update the user address on the local cache
+      onQueryStarted: async (address, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          accountApi.util.updateQueryData(
+            "fetchAddress",
+            undefined,
+            (draft) => {
+              Object.assign(draft, { ...address });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          patchResult.undo(); // if the query fails, undo the local cache update
+          toast.error("Failed to update address");
+        }
+      },
+    }),
   }),
 });
 
@@ -83,4 +119,6 @@ export const {
   useUserInfoQuery,
   useLogoutMutation,
   useLazyUserInfoQuery,
+  useFetchAddressQuery,
+  useUpdateUserAddressMutation,
 } = accountApi;

@@ -11,11 +11,20 @@ import {
 } from "@mui/material";
 import { AddressElement, PaymentElement } from "@stripe/react-stripe-js";
 import Review from "./Review";
+import { useFetchAddressQuery } from "../account/accountApi";
+import { Address } from "../../app/models/user";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
   // set state for active step
   const [activeStep, setActiveStep] = useState(0);
+
+  // fetch the user address
+  // if data is undefined, set the default values to empty object
+  // if data exists, extract 'name' separately
+  // and put remaining address fields in 'restAddress'
+  const { data: { name, ...restAddress } = {} as Address } =
+    useFetchAddressQuery();
 
   // handle next step function
   const handleNext = () => {
@@ -41,6 +50,10 @@ export default function CheckoutStepper() {
           <AddressElement
             options={{
               mode: "shipping",
+              defaultValues: {
+                name: name,
+                address: restAddress,
+              },
             }}
           />
           <FormControlLabel
