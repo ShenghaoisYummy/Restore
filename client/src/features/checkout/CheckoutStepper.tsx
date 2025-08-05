@@ -21,11 +21,32 @@ import {
   useUpdateUserAddressMutation,
 } from "../account/accountApi";
 import { Address } from "../../app/models/user";
+import {
+  StripeAddressElementChangeEvent,
+  StripePaymentElementChangeEvent,
+} from "@stripe/stripe-js";
+import { useBasket } from "../../lib/hooks/useBasket";
+import { currencyFormat } from "../../lib/util";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
-  // set state for active step
+  /**
+   * set state for active step
+   * this is used to set the active step of the checkout stepper
+   */
   const [activeStep, setActiveStep] = useState(0);
+  /**
+   * set the address completed state for the address element
+   * this is used to check if the user has completed the address step
+   */
+  const [addressCompleted, setAddressCompleted] = useState(false);
+
+  /**
+   * set the payment completed state for the payment element
+   * this is used to check if the user has completed the payment step
+   */
+
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
 
   /*
    * fetch the user address
@@ -56,10 +77,12 @@ export default function CheckoutStepper() {
    */
   const elements = useElements();
 
+  const { total } = useBasket();
+
   /**
    * handle next step function
    * if the active step is 0 and the save address checked is true,
-   * get the stripe address from stripe address element 
+   * get the stripe address from stripe address element
    * and update the address on the server side
    * then set the active step to the next step
    */
@@ -93,6 +116,23 @@ export default function CheckoutStepper() {
     setActiveStep((step) => step - 1);
   };
 
+  /**
+   * handle address change function
+   * this is used to check if the user has completed the address step
+   */
+
+  const handleAddressChange = (event: StripeAddressElementChangeEvent) => {
+    setAddressCompleted(event.complete);
+  };
+
+  /**
+   * handle payment change function
+   * this is used to check if the user has completed the payment step
+   */
+  const handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
+    setPaymentCompleted(event.complete);
+  };
+
   if (isLoading) return <Typography variant="h3">Loading...</Typography>;
 
   return (
@@ -114,6 +154,7 @@ export default function CheckoutStepper() {
                 address: restAddress,
               },
             }}
+            onChange={handleAddressChange}
           />
           <FormControlLabel
             sx={{ display: "flex", justifyContent: "end" }}
@@ -128,7 +169,7 @@ export default function CheckoutStepper() {
         </Box>
 
         <Box sx={{ display: activeStep === 1 ? "block" : "none" }}>
-          <PaymentElement />
+          <PaymentElement onChange={handlePaymentChange} />
         </Box>
         <Box sx={{ display: activeStep === 2 ? "block" : "none" }}>
           <Review />
@@ -138,8 +179,18 @@ export default function CheckoutStepper() {
         <Button variant="contained" color="primary" onClick={handleBack}>
           Back
         </Button>
-        <Button variant="contained" color="primary" onClick={handleNext}>
-          Next
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleNext}
+          disabled={
+            (activeStep === 0 && !addressCompleted) ||
+            (activeStep === 1 && !paymentCompleted)
+          }
+        >
+          {activeStep === steps.length - 1
+            ? `Pay ${currencyFormat(total)}`
+            : "Next"}
         </Button>
       </Box>
     </Paper>
