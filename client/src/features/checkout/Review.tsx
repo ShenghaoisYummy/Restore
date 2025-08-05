@@ -10,10 +10,35 @@ import {
 } from "@mui/material";
 import { useFetchBasketQuery } from "../basket/basketApi";
 import { currencyFormat } from "../../lib/util";
+import { ConfirmationToken } from "@stripe/stripe-js";
 
-export default function Review() {
+interface Props {
+  confirmationToken: ConfirmationToken | null;
+}
+
+export default function Review({ confirmationToken }: Props) {
   // fetch basket data
   const { data: basket } = useFetchBasketQuery();
+
+  const addressString = () => {
+    if (!confirmationToken?.shipping) return "";
+    const { name, address } = confirmationToken.shipping;
+    return `${name}
+    ${address?.line1}
+    ${address?.line2}
+    ${address?.city}
+    ${address?.state}
+    ${address?.postal_code}
+    ${address?.country}
+    `;
+  };
+
+  const paymentString = () => {
+    if (!confirmationToken?.payment_method_preview.card) return "";
+    const { brand, last4, exp_month, exp_year } =
+      confirmationToken.payment_method_preview.card;
+    return `${brand} ending in ${last4}, Exp: ${exp_month}/${exp_year}`;
+  };
 
   return (
     <div>
@@ -26,13 +51,13 @@ export default function Review() {
             Shipping address
           </Typography>
           <Typography component="dd" color="text.secondary">
-            address gose here
+            {addressString()}
           </Typography>
           <Typography component="dt" color="text.secondary">
             payment details
           </Typography>
           <Typography component="dd" color="text.secondary">
-            payment details gose here
+            {paymentString()}
           </Typography>
         </dl>
       </Box>

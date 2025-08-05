@@ -14,6 +14,7 @@ import {
   AddressElement,
   PaymentElement,
   useElements,
+  useStripe,
 } from "@stripe/react-stripe-js";
 import Review from "./Review";
 import {
@@ -24,9 +25,11 @@ import { Address } from "../../app/models/user";
 import {
   StripeAddressElementChangeEvent,
   StripePaymentElementChangeEvent,
+  ConfirmationToken,
 } from "@stripe/stripe-js";
 import { useBasket } from "../../lib/hooks/useBasket";
 import { currencyFormat } from "../../lib/util";
+import { toast } from "react-toastify";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
@@ -70,12 +73,18 @@ export default function CheckoutStepper() {
    */
   const [saveAddressChecked, setSaveAddressChecked] = useState(false);
 
+  const [confirmationToken, setConfirmationToken] =
+    useState<ConfirmationToken | null>(null);
+
   /**
    * get the elements from the useElements hook
    * this is used to get the address element from the stripe elements
    * and the payment element from the stripe elements
    */
   const elements = useElements();
+
+  // get the stripe instance from the useStripe hook
+  const stripe = useStripe();
 
   const { total } = useBasket();
 
@@ -86,10 +95,27 @@ export default function CheckoutStepper() {
    * and update the address on the server side
    * then set the active step to the next step
    */
+
   const handleNext = async () => {
     if (activeStep === 0 && saveAddressChecked) {
       const address = await getStripeAddress();
       if (address) await updateAddress(address);
+    }
+
+    /**
+     * if the active step is 1,
+     * create a confirmation token from the stripe elements
+     * and set the confirmation token to the state
+     */
+
+    if (activeStep === 1) {
+      if (!elements || !stripe) return;
+      const result = await elements.submit();
+      if (result.error) return toast.error(result.error.message);
+
+      const stripeResult = await stripe.createConfirmationToken({ elements });
+      if (stripeResult.error) return toast.error(stripeResult.error.message);
+      setConfirmationToken(stripeResult.confirmationToken);
     }
     setActiveStep((step) => step + 1);
   };
@@ -172,7 +198,7 @@ export default function CheckoutStepper() {
           <PaymentElement onChange={handlePaymentChange} />
         </Box>
         <Box sx={{ display: activeStep === 2 ? "block" : "none" }}>
-          <Review />
+          <Review confirmationToken={confirmationToken} />
         </Box>
       </Box>
       <Box display="flex" paddingTop={2} justifyContent={"space-between"}>
