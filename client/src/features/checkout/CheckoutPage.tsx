@@ -11,19 +11,20 @@ import { useAppSelector } from "../../app/store/store";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
-//1. User visits /checkout
-//    ↓
-// 2. CheckoutPage component loads
-//    ↓
-// 3. useEffect runs → createPaymentIntent() called
-//    ↓
-// 4. API call to POST /api/payments → creates Stripe Payment Intent
-//    ↓
-// 5. onQueryStarted updates basket cache with clientSecret
-//    ↓
-// 6. options becomes valid → Stripe Elements can render
-//    ↓
-// 7. create.current = true → prevents future API calls
+/* 1. User visits /checkout
+   ↓
+2. CheckoutPage component loads
+   ↓
+3. useEffect runs → createPaymentIntent() called
+   ↓
+4. API call to POST /api/payments → creates Stripe Payment Intent
+   ↓
+5. onQueryStarted updates basket cache with clientSecret
+   ↓
+6. options becomes valid → Stripe Elements can render
+   ↓
+7. create.current = true → prevents future API calls 
+*/
 
 export default function CheckoutPage() {
   // fetch current client's basket
@@ -36,9 +37,10 @@ export default function CheckoutPage() {
   // create a ref to prevent multiple API calls
   const create = useRef(false);
 
-  // get the boolean value of darkMode from the ui slice
-  // it means if the current mode is dark, then the theme will be night,
-  // otherwise it will be stripe, which is the default theme
+  /* get the boolean value of darkMode from the ui slice
+    it means if the current mode is dark, then the theme will be night,
+    otherwise it will be stripe, which is the default theme 
+  */
   const { darkMode } = useAppSelector((state) => state.ui);
 
   // useEffect to call createPaymentIntent only once when the component mounts

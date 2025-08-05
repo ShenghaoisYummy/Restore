@@ -7,10 +7,12 @@ public class Basket
     public int Id { get; set; }
     public required string BasketId { get; set; }
     public List<BasketItem> Items { get; set; } = [];
-
-    // use to set and get the client secret for the payment intent
-    // the client secret is used to authenticate and authorize actions on the payment intent
-    // it is safe to expose, because it is only only for confirming/completing this specific payment
+    
+    /**
+     * use to set and get the client secret for the payment intent
+     * the client secret is used to authenticate and authorize actions on the payment intent
+     * it is safe to expose, because it is only only for confirming/completing this specific payment
+     */
     public string? ClientSecret { get; set; }
 
     // use to set and get the payment intent id for the payment intent
