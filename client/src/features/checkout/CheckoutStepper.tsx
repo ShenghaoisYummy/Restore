@@ -30,9 +30,16 @@ import {
 import { useBasket } from "../../lib/hooks/useBasket";
 import { currencyFormat } from "../../lib/util";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
+  /**
+   * set the submitting state for the checkout stepper
+   * this is used to check if the user is submitting the payment
+   */
+  const [submitting, setSubmitting] = useState(false);
+
   /**
    * set state for active step
    * this is used to set the active step of the checkout stepper
@@ -86,7 +93,34 @@ export default function CheckoutStepper() {
   // get the stripe instance from the useStripe hook
   const stripe = useStripe();
 
+  // get the basket from the useBasket hook
+  const { basket } = useBasket();
+
+  // get the navigate from the useNavigate hook
+  const navigate = useNavigate();
+
+  /**
+   * get the total from the useBasket hook
+   * this is used to get the total price of the basket
+   */
   const { total } = useBasket();
+
+  const getStripeAddress = async () => {
+    // get the address element from the stripe elements
+    const addressElement = elements?.getElement("address");
+
+    // if the address element is not found, return null
+    if (!addressElement) return null;
+
+    // destructure the value of the address element
+    const {
+      value: { name, address },
+    } = await addressElement.getValue();
+
+    // return destructured name and address , if the name and address are not found, return null
+    if (name && address) return { name, ...address };
+    return null;
+  };
 
   /**
    * handle next step function
@@ -117,24 +151,16 @@ export default function CheckoutStepper() {
       if (stripeResult.error) return toast.error(stripeResult.error.message);
       setConfirmationToken(stripeResult.confirmationToken);
     }
+
+    /**
+     * if the active step is 2,
+     * confirm the payment through stripe api
+     * and navigate to the success page
+     */
+    if (activeStep === 2) {
+      await confirmPayment();
+    }
     setActiveStep((step) => step + 1);
-  };
-
-  const getStripeAddress = async () => {
-    // get the address element from the stripe elements
-    const addressElement = elements?.getElement("address");
-
-    // if the address element is not found, return null
-    if (!addressElement) return null;
-
-    // destructure the value of the address element
-    const {
-      value: { name, address },
-    } = await addressElement.getValue();
-
-    // return destructured name and address , if the name and address are not found, return null
-    if (name && address) return { name, ...address };
-    return null;
   };
 
   // handle back step function
@@ -157,6 +183,35 @@ export default function CheckoutStepper() {
    */
   const handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
     setPaymentCompleted(event.complete);
+  };
+
+  const confirmPayment = async () => {
+    setSubmitting(true); // set the submitting state to true for showing the loading spinner
+
+    try {
+      // if the confirmation token or client secret is not found, throw an error
+      if (!confirmationToken || !basket?.clientSecret)
+        throw new Error("Missing confirmation token or client secret");
+
+      // confirm the payment through stripe api
+      const paymentResult = await stripe?.confirmPayment({
+        clientSecret: basket.clientSecret,
+        redirect: "if_required",
+        confirmParams: {
+          confirmation_token: confirmationToken.id,
+        },
+      });
+      if (paymentResult?.paymentIntent?.status === "succeeded") {
+        navigate("/checkout/success"); // if success, navigate to the success page
+      } else if (paymentResult?.error) {
+        throw new Error(paymentResult.error.message);
+      } else {
+        throw new Error("Something went wrong with the payment");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    setActiveStep((step) => step - 1); // back to the previous step
   };
 
   if (isLoading) return <Typography variant="h3">Loading...</Typography>;
@@ -211,7 +266,8 @@ export default function CheckoutStepper() {
           onClick={handleNext}
           disabled={
             (activeStep === 0 && !addressCompleted) ||
-            (activeStep === 1 && !paymentCompleted)
+            (activeStep === 1 && !paymentCompleted) ||
+            submitting
           }
         >
           {activeStep === steps.length - 1
