@@ -2,6 +2,7 @@ import { baseQueryWithErrorHandling } from "../../app/API/baseApi";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { Basket, Item } from "../../app/models/basket";
 import { Product } from "../../app/models/product";
+import Cookies from "js-cookie";
 
 // type guard to check if the product is a BasketItem
 function isBasketItem(product: Product | Item): product is Item {
@@ -33,7 +34,7 @@ export const basketApi = createApi({
       onQueryStarted: async (
         { product, quantity },
         { dispatch, queryFulfilled }
-      ) => { 
+      ) => {
         let isNewBasket = false;
         const patchResult = dispatch(
           basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
@@ -47,7 +48,7 @@ export const basketApi = createApi({
               const existingItem = draft.items.find(
                 (item) => item.productId === productId
               );
-              if (existingItem) { 
+              if (existingItem) {
                 existingItem.quantity += quantity;
               } else {
                 draft.items.push(
@@ -106,6 +107,22 @@ export const basketApi = createApi({
         }
       },
     }),
+    /**
+     * This mutation is only used to client-side clear the redux basket cache
+     * without making a request to the server.
+     * We use queryFn to return undefined to avoid making a request to the server.
+     */
+    clearBasket: builder.mutation<void, void>({
+      queryFn: () => ({ data: undefined }),
+      onQueryStarted: async (_, { dispatch }) => {
+        const patchResult = dispatch(
+          basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+            draft.items = [];
+          })
+        );
+        Cookies.remove("basketId");
+      },
+    }),
   }),
 });
 
@@ -113,4 +130,5 @@ export const {
   useFetchBasketQuery,
   useAddBasketItemMutation,
   useRemoveBasketItemMutation,
+  useClearBasketMutation,
 } = basketApi;

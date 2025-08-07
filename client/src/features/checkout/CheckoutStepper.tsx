@@ -31,6 +31,7 @@ import { useBasket } from "../../lib/hooks/useBasket";
 import { currencyFormat } from "../../lib/util";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
@@ -94,7 +95,7 @@ export default function CheckoutStepper() {
   const stripe = useStripe();
 
   // get the basket from the useBasket hook
-  const { basket } = useBasket();
+  const { basket, clearBasket } = useBasket();
 
   // get the navigate from the useNavigate hook
   const navigate = useNavigate();
@@ -203,6 +204,7 @@ export default function CheckoutStepper() {
       });
       if (paymentResult?.paymentIntent?.status === "succeeded") {
         navigate("/checkout/success"); // if success, navigate to the success page
+        clearBasket(); // clear the basket cache from the redux store after successful payment
       } else if (paymentResult?.error) {
         throw new Error(paymentResult.error.message);
       } else {
@@ -260,20 +262,17 @@ export default function CheckoutStepper() {
         <Button variant="contained" color="primary" onClick={handleBack}>
           Back
         </Button>
-        <Button
+        <LoadingButton
           variant="contained"
           color="primary"
           onClick={handleNext}
-          disabled={
-            (activeStep === 0 && !addressCompleted) ||
-            (activeStep === 1 && !paymentCompleted) ||
-            submitting
-          }
+          disabled={(activeStep === 0 && !addressCompleted) || submitting}
+          loading={submitting}
         >
           {activeStep === steps.length - 1
             ? `Pay ${currencyFormat(total)}`
             : "Next"}
-        </Button>
+        </LoadingButton>
       </Box>
     </Paper>
   );
