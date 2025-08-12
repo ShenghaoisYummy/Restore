@@ -40,7 +40,7 @@ namespace API.Controllers
         {
             var basket = await context.Baskets.GetBasketWithItems(Request.Cookies["basketId"]!);
 
-            if (basket == null) return BadRequest(new ProblemDetails { Title = "Basket Not Found" });
+            if (basket == null || basket.Items.Count == 0 || string.IsNullOrEmpty(basket.PaymentIntentId)) return BadRequest(new ProblemDetails { Title = "Basket Not Found" });
 
             var items = CreateOrderItems(basket.Items);
             if (items == null) return BadRequest(new ProblemDetails { Title = "some items out of stock" });

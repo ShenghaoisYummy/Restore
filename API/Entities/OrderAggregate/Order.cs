@@ -13,13 +13,13 @@ namespace API.Entities.OrderAggregate
         public int Id { get; set; }
         public required string BuyerEmail { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public List<OrderItem> OrderItems { get; set; } =[];
+        public List<OrderItem> OrderItems { get; set; } = [];
         public decimal Subtotal { get; set; }
         public decimal DeliveryFee { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public required ShippingAddress ShippingAddress { get; set; }
         public required PaymentSummary PaymentSummary { get; set; }
-        public string? PaymentIntentId { get; set; }
+        public required string PaymentIntentId { get; set; }
         public long Discount { get; set; }
 
 

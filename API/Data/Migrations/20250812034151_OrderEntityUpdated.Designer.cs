@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20250812034151_OrderEntityUpdated")]
+    partial class OrderEntityUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -133,28 +136,6 @@ namespace API.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("API.Entities.OrderAggregate.OrderItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>
@@ -425,6 +406,59 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
                 {
+                    b.OwnsMany("API.Entities.OrderAggregate.OrderItem", "OrderItems", b1 =>
+                        {
+                            b1.Property<int>("OrderId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<decimal>("Price")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Quantity")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("OrderId", "Id");
+
+                            b1.ToTable("OrderItem");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderId");
+
+                            b1.OwnsOne("API.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered", b2 =>
+                                {
+                                    b2.Property<int>("OrderItemOrderId")
+                                        .HasColumnType("INTEGER");
+
+                                    b2.Property<int>("OrderItemId")
+                                        .HasColumnType("INTEGER");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<string>("PictureUrl")
+                                        .IsRequired()
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<int>("ProductId")
+                                        .HasColumnType("INTEGER");
+
+                                    b2.HasKey("OrderItemOrderId", "OrderItemId");
+
+                                    b2.ToTable("OrderItem");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("OrderItemOrderId", "OrderItemId");
+                                });
+
+                            b1.Navigation("ItemOrdered")
+                                .IsRequired();
+                        });
+
                     b.OwnsOne("API.Entities.OrderAggregate.PaymentSummary", "PaymentSummary", b1 =>
                         {
                             b1.Property<int>("OrderId")
@@ -492,44 +526,12 @@ namespace API.Data.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
+                    b.Navigation("OrderItems");
+
                     b.Navigation("PaymentSummary")
                         .IsRequired();
 
                     b.Navigation("ShippingAddress")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("API.Entities.OrderAggregate.OrderItem", b =>
-                {
-                    b.HasOne("API.Entities.OrderAggregate.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
-
-                    b.OwnsOne("API.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered", b1 =>
-                        {
-                            b1.Property<int>("OrderItemId")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("PictureUrl")
-                                .IsRequired()
-                                .HasColumnType("TEXT");
-
-                            b1.Property<int>("ProductId")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("OrderItemId");
-
-                            b1.ToTable("OrderItem");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderItemId");
-                        });
-
-                    b.Navigation("ItemOrdered")
                         .IsRequired();
                 });
 
@@ -596,11 +598,6 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Basket", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }
