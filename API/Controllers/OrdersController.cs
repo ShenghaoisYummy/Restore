@@ -43,6 +43,8 @@ namespace API.Controllers
             if (basket == null) return BadRequest(new ProblemDetails { Title = "Basket Not Found" });
 
             var items = CreateOrderItems(basket.Items);
+            if (items == null) return BadRequest(new ProblemDetails { Title = "some items out of stock" });
+
             var subtotal = items.Sum(item => item.Price * item.Quantity);
             var deliveryFee = CalculateDeliveryFee((long)subtotal);
 
@@ -71,12 +73,38 @@ namespace API.Controllers
 
         private long CalculateDeliveryFee(long subtotal)
         {
-            throw new NotImplementedException();
+            var deliveryFee = subtotal > 10000 ? 0 : 500;
+            return deliveryFee;
         }
 
         private List<OrderItem> CreateOrderItems(List<BasketItem> items)
         {
-            throw new NotImplementedException();
+            var orderItems = new List<OrderItem>();
+            // loop through items and create order items
+            foreach (var item in items)
+            {
+                // check if quantity in stock is enough
+                if (item.Product.QuantityInStock < item.Quantity)
+                    return null;
+
+                // create order item
+                var orderItem = new OrderItem
+                {
+                    ItemOrdered = new ProductItemOrdered
+                    {
+                        ProductId = item.ProductId,
+                        Name = item.Product.Name,
+                        PictureUrl = item.Product.PictureUrl,
+                    },
+                    Price = item.Product.Price,
+                    Quantity = item.Quantity
+                };
+                // add order item to list
+                orderItems.Add(orderItem);
+            }
+            // return list of order items
+            return orderItems;
         }
+
     }
 }
