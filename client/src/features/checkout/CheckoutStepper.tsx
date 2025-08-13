@@ -32,6 +32,7 @@ import { currencyFormat } from "../../lib/util";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
+import { useCreateOrderMutation } from "../orders/orderaPI";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
@@ -51,6 +52,9 @@ export default function CheckoutStepper() {
    * this is used to check if the user has completed the address step
    */
   const [addressCompleted, setAddressCompleted] = useState(false);
+
+  // create order mutation for creating an order on the server side
+  const [createOrder] = useCreateOrderMutation();
 
   /**
    * set the payment completed state for the payment element
@@ -194,6 +198,11 @@ export default function CheckoutStepper() {
       if (!confirmationToken || !basket?.clientSecret)
         throw new Error("Missing confirmation token or client secret");
 
+      // create the order model
+      const orderModel = await createOrderModel();
+
+      const orderResult = await createOrder(orderModel);
+
       // confirm the payment through stripe api
       const paymentResult = await stripe?.confirmPayment({
         clientSecret: basket.clientSecret,
@@ -203,7 +212,7 @@ export default function CheckoutStepper() {
         },
       });
       if (paymentResult?.paymentIntent?.status === "succeeded") {
-        navigate("/checkout/success"); // if success, navigate to the success page
+        navigate("/checkout/success", { state: orderResult }); // if success, navigate to the success page
         clearBasket(); // clear the basket cache from the redux store after successful payment
       } else if (paymentResult?.error) {
         throw new Error(paymentResult.error.message);
@@ -214,6 +223,20 @@ export default function CheckoutStepper() {
       toast.error(error.message);
     }
     setActiveStep((step) => step - 1); // back to the previous step
+  };
+
+  const createOrderModel = async () => {
+    // get the shipping address from the stripe address element
+    const shippingAddress = await getStripeAddress();
+
+    // get the payment summary from the stripe confirmation token
+    const paymentSummary = confirmationToken?.payment_method_preview.card;
+
+    // if the shipping address or payment summary is not found, throw an error
+    if (!shippingAddress || !paymentSummary)
+      throw new Error("Missing shipping address or payment summary");
+
+    return { shippingAddress, paymentSummary };
   };
 
   if (isLoading) return <Typography variant="h3">Loading...</Typography>;

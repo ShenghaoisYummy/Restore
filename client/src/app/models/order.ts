@@ -17,10 +17,10 @@ export interface ShippingAddress {
 }
 
 export interface PaymentSummary {
-  last4: number;
+  last4: number | string;
   brand: string;
-  expMonth: number;
-  expYear: number;
+  exp_month: number;
+  exp_year: number;
 }
 
 export interface Order {
