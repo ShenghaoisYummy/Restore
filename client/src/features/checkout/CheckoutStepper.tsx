@@ -32,7 +32,7 @@ import { currencyFormat } from "../../lib/util";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import { useCreateOrderMutation } from "../orders/orderaPI";
+import { useCreateOrderMutation } from "../orders/orderApi";
 
 const steps = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {

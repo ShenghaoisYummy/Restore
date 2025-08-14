@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useFetchOrdersQuery } from "./orderApi";
 import { Order } from "../../app/models/order";
+import { Link } from "react-router-dom";
 
 export default function OrdersPage() {
   const { data: orders, isLoading } = useFetchOrdersQuery();
@@ -74,10 +75,8 @@ export default function OrdersPage() {
                   <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => {
-                      // TODO: Navigate to order details
-                      console.log(`View order ${order.id}`);
-                    }}
+                    component={Link}
+                    to={`/orders/${order.id}`}
                   >
                     View Details
                   </Button>

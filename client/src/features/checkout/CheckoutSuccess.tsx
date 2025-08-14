@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { Order } from "../../app/models/order";
 import { Link, useLocation } from "react-router-dom";
 import { Container, Paper, Divider } from "@mui/material";
-import { currencyFormat } from "../../lib/util";
+import { addressString, currencyFormat, paymentString } from "../../lib/util";
 
 export default function CheckoutSuccess() {
   /**
@@ -15,27 +15,6 @@ export default function CheckoutSuccess() {
 
   if (!order) return <Typography variant="h3">Order not found</Typography>;
 
-  // create a function to format the address string
-  const addressString = () => {
-    const address = order.shippingAddress;
-
-    return `${address?.name}
-    ${address?.line1}
-    ${address?.line2}
-    ${address?.city}
-    ${address?.state}
-    ${address?.postal_code}
-    ${address?.country}
-    `;
-  };
-
-  // create a function to format the payment string
-  const paymentString = () => {
-    const card = order.paymentSummary;
-    return `${card?.brand?.toUpperCase()} ending in ${card?.last4}, Exp: ${
-      card?.exp_month
-    }/${card?.exp_year}`;
-  };
   /**
    *
    * Browser Layout Structure:
@@ -107,7 +86,7 @@ export default function CheckoutSuccess() {
               Payment method
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              {paymentString()}
+              {paymentString(order)}
             </Typography>
           </Box>
           <Divider />
@@ -116,7 +95,7 @@ export default function CheckoutSuccess() {
               Shipping address
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              {addressString()}
+              {addressString(order)}
             </Typography>
           </Box>
           <Divider />
