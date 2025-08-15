@@ -164,3 +164,8 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Drawing.Common.dll
 /Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
 /Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/API.staticwebassets.runtime.json
+/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/g3gbsxkoe0-7hvwdd5rw5.gz
+/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/z91z8of7bi-lv13oy6muc.gz
+/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/1dpm1p8bmc-no7sx2h9yo.gz
+/Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/4pit3vs01m-69kjnsiwqx.gz
