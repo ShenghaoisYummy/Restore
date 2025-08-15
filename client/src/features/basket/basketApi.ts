@@ -115,7 +115,7 @@ export const basketApi = createApi({
     clearBasket: builder.mutation<void, void>({
       queryFn: () => ({ data: undefined }),
       onQueryStarted: async (_, { dispatch }) => {
-        const patchResult = dispatch(
+        dispatch(
           basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
             draft.items = [];
             draft.basketId = "";

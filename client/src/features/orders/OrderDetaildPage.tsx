@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { useFetchOrderDetailedQuery } from "./orderApi";
-import { Card, CardHeader } from "@mui/material";
+import { Card } from "@mui/material";
 import { Button } from "@mui/material";
 import { format } from "date-fns";
 import { addressString, currencyFormat, paymentString } from "../../lib/util";

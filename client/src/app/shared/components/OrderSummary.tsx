@@ -7,13 +7,11 @@ import {
   Paper,
 } from "@mui/material";
 import { currencyFormat } from "../../../lib/util";
-import { useFetchBasketQuery } from "../../../features/basket/basketApi";
-import { Item } from "../../models/basket";
 import { Link, useLocation } from "react-router-dom";
 import { useBasket } from "../../../lib/hooks/useBasket";
 
 export default function OrderSummary() {
-  const {subtotal, deliveryFee } = useBasket();
+  const { subtotal, deliveryFee } = useBasket();
   const location = useLocation();
 
   return (

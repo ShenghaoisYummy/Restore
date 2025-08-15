@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import Search from "./Search";
 import { useAppSelector, useAppDispatch } from "../../app/store/store";
 import RadioButtonGroup from "../../app/shared/RadioButtonGroup";

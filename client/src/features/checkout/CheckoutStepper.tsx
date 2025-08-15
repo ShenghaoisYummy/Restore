@@ -292,7 +292,11 @@ export default function CheckoutStepper() {
           variant="contained"
           color="primary"
           onClick={handleNext}
-          disabled={(activeStep === 0 && !addressCompleted) || submitting}
+          disabled={
+            (activeStep === 0 && !addressCompleted) ||
+            (activeStep === 1 && !paymentCompleted) ||
+            submitting
+          }
           loading={submitting}
         >
           {activeStep === steps.length - 1

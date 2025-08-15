@@ -1,4 +1,3 @@
-import { CounterState } from "./counterReducer";
 import { Typography, Button } from "@mui/material";
 
 import { useAppSelector, useAppDispatch } from "../../app/store/store";
