@@ -10,6 +10,8 @@ export default defineConfig({
   // when we run app.UseStaticFiles() in Program.cs, it will serve the static files from the wwwroot folder
   build: {
     outDir: "../API/wwwroot",
+    chunkSizeWarningLimit: 1024,
+    emptyOutDir: true,
   },
   plugins: [react(), mkcert()],
 });
