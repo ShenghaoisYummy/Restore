@@ -23,7 +23,7 @@ export function filterEmptyValues(values: object) {
     ${address?.state}
     ${address?.postal_code}
     ${address?.country}
-    `;
+    `; 
   };
 
   // create a function to format the payment string

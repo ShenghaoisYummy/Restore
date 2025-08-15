@@ -10,5 +10,6 @@ namespace API.Entities.OrderAggregate
         Pending,
         PaymentReceived,
         PaymentFailed,
+        PaymentMismatch
     }
 }

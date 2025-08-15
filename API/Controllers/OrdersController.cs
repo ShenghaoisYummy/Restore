@@ -40,36 +40,53 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(CreateOrderDto orderDto)
         {
+            // fetch the basket with the basket id stored in the cookies
             var basket = await context.Baskets.GetBasketWithItems(Request.Cookies["basketId"]!);
 
+            // if the basket is not found or the items are empty or the payment intent id is null, return bad request
             if (basket == null || basket.Items.Count == 0 || string.IsNullOrEmpty(basket.PaymentIntentId)) return BadRequest(new ProblemDetails { Title = "Basket Not Found" });
 
+            // create the order items
             var items = CreateOrderItems(basket.Items);
+
+            // if the items are null, return bad request
             if (items == null) return BadRequest(new ProblemDetails { Title = "some items out of stock" });
 
+            // calculate the subtotal and delivery fee
             var subtotal = items.Sum(item => item.Price * item.Quantity);
             var deliveryFee = CalculateDeliveryFee((long)subtotal);
 
-            var order = new Order
+            // fetch the existing order with the payment intent id
+            var order = await context.Orders.
+            Include(o => o.OrderItems).
+            FirstOrDefaultAsync(o => o.PaymentIntentId == basket.PaymentIntentId);
+
+            // if the order is not found, create a new order
+            if (order == null)
             {
-                OrderItems = items,
-                BuyerEmail = User.GetUsername(),
-                ShippingAddress = orderDto.ShippingAddress,
-                DeliveryFee = deliveryFee,
-                Subtotal = subtotal,
-                PaymentSummary = orderDto.PaymentSummary,
-                PaymentIntentId = basket.PaymentIntentId,
-            };
-            context.Orders.Add(order);
+                order = new Order
+                {
+                    OrderItems = items,
+                    BuyerEmail = User.GetUsername(),
+                    ShippingAddress = orderDto.ShippingAddress,
+                    DeliveryFee = deliveryFee,
+                    Subtotal = subtotal,
+                    PaymentSummary = orderDto.PaymentSummary,
+                    PaymentIntentId = basket.PaymentIntentId,
+                };
+                context.Orders.Add(order);
+            }
+            // if the order is found, update the order items
+            else
+            {
+                order.OrderItems = items;
+            }
 
-            context.Baskets.Remove(basket);
-            Response.Cookies.Delete("basketId");
-
+            // save changes to database
             var result = await context.SaveChangesAsync() > 0;
             if (!result) return BadRequest(new ProblemDetails { Title = "Problem creating order" });
 
-            // This is CreatedAtAction - a special ASP.NET Core method that 
-            // returns a HTTP 201 Created response with additional metadata.
+            // Return HTTP 201 Created response with location header pointing to the newly created order
             return CreatedAtAction(nameof(GetOrderDetails), new { id = order.Id }, order.ToDto());
         }
 
