@@ -27,9 +27,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://restore-austin.azurewebsites.net")
+        policy.WithOrigins("https://localhost:5173", "https://restore-austin.azurewebsites.net")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -58,12 +59,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseCors(opt =>
-{
-    opt.AllowAnyHeader()
-       .AllowAnyMethod().AllowCredentials()
-       .WithOrigins("https://localhost:5173");
-});
+app.UseCors("AllowFrontend");
 // Configure the HTTP request pipeline.
 
 app.UseAuthentication();
