@@ -58,6 +58,16 @@ app.UseCors(opt =>
 });
 // Configure the HTTP request pipeline.
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://restore-austin.azurewebsites.net")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
