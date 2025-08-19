@@ -23,7 +23,15 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 
 
 // Add Cors to the dependency injection container
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://restore-austin.azurewebsites.net")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // Add ExceptionMiddleware to the dependency injection container
 builder.Services.AddTransient<ExceptionMiddleware>();
@@ -57,16 +65,6 @@ app.UseCors(opt =>
        .WithOrigins("https://localhost:5173");
 });
 // Configure the HTTP request pipeline.
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.WithOrigins("https://restore-austin.azurewebsites.net")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
 
 app.UseAuthentication();
 app.UseAuthorization();
