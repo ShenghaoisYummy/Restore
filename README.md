@@ -81,7 +81,8 @@ Restore/
 │   │   │   ├── store/          # Redux store
 │   │   │   └── models/         # TypeScript interfaces
 │   │   └── lib/                # Utilities & hooks
-└── docker-compose.yml          # Development database
+├── docker-compose.yml          # Development database
+└── .github/workflows/          # GitHub Actions CI/CD
 ```
 
 ## 🚀 Getting Started
@@ -89,7 +90,8 @@ Restore/
 ### Prerequisites
 - **.NET 9 SDK**
 - **Node.js** (v18 or higher)
-- **Docker** (for local database)
+- **Docker** (for local development database)
+- **SQL Server** (for production)
 - **Stripe Account** (for payment processing)
 
 ### Installation
@@ -198,7 +200,7 @@ This project showcases proficiency in:
 - **Payment Integration**: Stripe payment processing
 - **State Management**: Redux Toolkit, RTK Query
 - **UI/UX Design**: Material-UI, responsive design
-- **DevOps**: Docker, Azure deployment, CI/CD
+- **DevOps**: Docker, GitHub Actions CI/CD, Azure deployment
 - **Security**: JWT authentication, secure payment handling
 
 ## 📄 License
