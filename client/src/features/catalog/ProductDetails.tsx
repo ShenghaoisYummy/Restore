@@ -18,6 +18,7 @@ import {
   useFetchBasketQuery,
 } from "../basket/basketApi";
 import { ChangeEvent, useEffect, useState } from "react";
+import { currencyFormat } from "../../lib/util";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -75,7 +76,7 @@ export default function ProductDetails() {
         <Typography variant="h3">{product.name}</Typography>
         <Divider sx={{ mb: 2 }} />
         <Typography variant="h4" color="secondary">
-          ${product.price}
+          {currencyFormat(product.price)}
         </Typography>
         <TableContainer>
           <Table sx={{ "&td": { fontSize: "1rem" } }}>
