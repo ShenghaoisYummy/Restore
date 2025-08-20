@@ -129,16 +129,22 @@ ILogger<PaymentsController> logger) : BaseApiController
         .FirstOrDefaultAsync(o => o.PaymentIntentId == intent.Id)
             ?? throw new Exception("Order not found");
 
+        var orderTotalInCents = (long)(order.GetTotal() * 100);
+        logger.LogInformation("Payment intent succeeded. Order ID: {OrderId}, Order total (cents): {OrderTotal}, Intent amount (cents): {IntentAmount}", 
+            order.Id, orderTotalInCents, intent.Amount);
 
         // if the order total is not the same as the intent amount,
         // we need to set the order status to payment mismatch
-        if (order.GetTotal() != intent.Amount)
+        if (orderTotalInCents != intent.Amount)
         {
+            logger.LogWarning("Payment amount mismatch for order {OrderId}. Expected: {Expected}, Received: {Received}", 
+                order.Id, orderTotalInCents, intent.Amount);
             order.Status = OrderStatus.PaymentMismatch;
 
         }
         else
         {
+            logger.LogInformation("Payment successful for order {OrderId}", order.Id);
             order.Status = OrderStatus.PaymentReceived;
         }
 

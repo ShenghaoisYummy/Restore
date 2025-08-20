@@ -174,9 +174,7 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/API.MvcApplicationPartsAssemblyInfo.cache
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/API.sourcelink.json
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/scopedcss/bundle/API.styles.css
-/Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/compressed/g3gbsxkoe0-7hvwdd5rw5.gz
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/compressed/z91z8of7bi-lv13oy6muc.gz
-/Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/compressed/1dpm1p8bmc-no7sx2h9yo.gz
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/compressed/4pit3vs01m-69kjnsiwqx.gz
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/staticwebassets.build.json
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/staticwebassets.development.json
@@ -193,3 +191,5 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/API.pdb
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/API.genruntimeconfig.cache
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/ref/API.dll
+/Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/compressed/xl6fya3nmq-cwv8n2h9s7.gz
+/Users/shenghaoxu/Projects/practice/Restore/API/obj/Release/net9.0/compressed/1dpm1p8bmc-62nieikkr0.gz
