@@ -45,8 +45,16 @@ builder.Services.AddScoped<PaymentsService>();
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {
     opt.User.RequireUniqueEmail = true;
+    opt.SignIn.RequireConfirmedEmail = false;
 }).AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<StoreContext>();
+.AddEntityFrameworkStores<StoreContext>()
+.AddSignInManager<SignInManager<User>>();
+
+// Configure Identity to allow login with email
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+});
 
 
 var app = builder.Build();
