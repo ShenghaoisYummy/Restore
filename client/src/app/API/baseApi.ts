@@ -6,7 +6,8 @@ import {
 import { startLoading, stopLoading } from "../layout/uiSlice";
 import { toast } from "react-toastify";
 
-const baseUrl = import.meta.env.VITE_API_URL;
+const baseUrl = import.meta.env.VITE_API_URL || 
+  (import.meta.env.DEV ? 'https://localhost:5001' : 'https://restore-austin.azurewebsites.net');
 
 const customBaseQuery = fetchBaseQuery({
   baseUrl: baseUrl,

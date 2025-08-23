@@ -7,7 +7,12 @@
       "Bash(npm run build:*)",
       "Bash(npm uninstall:*)",
       "Bash(git reset:*)",
-      "Bash(git clean:*)"
+      "Bash(git clean:*)",
+      "Bash(dotnet run:*)",
+      "Bash(docker exec:*)",
+      "Bash(dotnet ef database drop:*)",
+      "Bash(dotnet ef database:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []
