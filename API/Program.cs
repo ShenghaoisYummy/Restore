@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Middleware;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add MVC controllers to the dependency injection container.
@@ -33,6 +34,8 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add ExceptionMiddleware to the dependency injection container
 builder.Services.AddTransient<ExceptionMiddleware>();

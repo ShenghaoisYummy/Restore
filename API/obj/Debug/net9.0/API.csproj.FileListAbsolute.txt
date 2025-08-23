@@ -195,3 +195,4 @@
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/rmo5k1f06z-z8fd9augtx.gz
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/sn4pp1roua-0sc4wuecus.gz
 /Users/shenghaoxu/Projects/practice/Restore/API/obj/Debug/net9.0/compressed/1dpm1p8bmc-80ebzsa0d7.gz
+/Users/shenghaoxu/Projects/practice/Restore/API/bin/Debug/net9.0/AutoMapper.dll

@@ -6,11 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using API.Extensions;
 using API.RequestHelpers;
 using API.Extentsions;
+using API.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace API.Controllers
 {
 
-    public class ProductsController(StoreContext context) : BaseApiController
+    public class ProductsController(StoreContext context, IMapper mapper) : BaseApiController
     {
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts([FromQuery] ProductParams productParams)
@@ -25,7 +28,7 @@ namespace API.Controllers
             var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
 
             Response.AddPaginationHeader(products.Metadata);
-            
+
             return products;
 
         }
@@ -44,11 +47,22 @@ namespace API.Controllers
         }
 
         [HttpGet("filters")]
-        public async Task<IActionResult> GetFilters(){
+        public async Task<IActionResult> GetFilters()
+        {
             var brands = await context.Products.Select(x => x.Brand).Distinct().ToListAsync();
             var types = await context.Products.Select(x => x.Type).Distinct().ToListAsync();
 
-            return Ok(new {brands, types});
+            return Ok(new { brands, types });
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
+        {
+            var product = mapper.Map<Product>(productDto);
+            context.Products.Add(product);
+            var result = await context.SaveChangesAsync() > 0;
+            if (result) return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            return BadRequest(new ProblemDetails { Title = "Problem creating product" });
         }
     }
 }
