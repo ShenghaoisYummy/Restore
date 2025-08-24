@@ -9,11 +9,12 @@ using API.Extentsions;
 using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using API.Services;
 
 namespace API.Controllers
 {
 
-    public class ProductsController(StoreContext context, IMapper mapper) : BaseApiController
+    public class ProductsController(StoreContext context, IMapper mapper, ImageService imageService) : BaseApiController
     {
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts([FromQuery] ProductParams productParams)
@@ -32,8 +33,6 @@ namespace API.Controllers
             return products;
 
         }
-
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
@@ -76,14 +75,33 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
 
-        {  // create a new product and using automapper to map the productDto to a product
+        {
+            // create a new product and using automapper to map the productDto to a product
+            // map same properties from productDto to product
             var product = mapper.Map<Product>(productDto);
+
+            // upload the image to cloudinary, and get the url to product.PictureUrl
+            if (productDto.File != null)
+            {
+                var imageResult = await imageService.AddImageAsync(productDto.File);
+                if (imageResult.Error != null)
+                {
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                }
+
+                product.PictureUrl = imageResult.SecureUrl.AbsoluteUri;
+                product.PublicId = imageResult.PublicId;
+            }
+
             //add the product to the database
             context.Products.Add(product);
+
             //save the changes to the database and check if it was successful
             var result = await context.SaveChangesAsync() > 0;
+
             //if the changes were successful, return the created product
             if (result) return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+
             //if the changes were not successful, return a bad request
             return BadRequest(new ProblemDetails { Title = "Problem creating product" });
         }
@@ -94,17 +112,22 @@ namespace API.Controllers
         {
             // find the product to update
             var product = await context.Products.FindAsync(updateProductDto.Id);
+
             // if the product is not found, return a not found response
             if (product == null) return NotFound();
+
             // map the updateProductDto to the product
             mapper.Map(updateProductDto, product);
+
             // save the changes to the database and check if it was successful
             var result = await context.SaveChangesAsync() > 0;
+
             // if the changes were successful, return the updated product
             if (result) return Ok(product);
+
             // if the changes were not successful, return a bad request
             return BadRequest(new ProblemDetails { Title = "Problem updating product" });
-        } 
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
@@ -112,11 +135,15 @@ namespace API.Controllers
         {
             // find the product to delete
             var product = await context.Products.FindAsync(id);
+
             // if the product is not found, return a not found response
             if (product == null) return NotFound();
+
             // remove the product from the database
             context.Products.Remove(product);
+
             var result = await context.SaveChangesAsync() > 0;
+
             if (result) return Ok();
             return BadRequest(new ProblemDetails { Title = "Problem deleting product" });
         }
