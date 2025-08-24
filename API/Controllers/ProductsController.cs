@@ -54,14 +54,37 @@ namespace API.Controllers
 
             return Ok(new { brands, types });
         }
+
+
+        /*
+         * AutoMapper is a library that helps us to map the CreateProductDto to a Product entity.
+         * 
+         * It automatically maps properties with matching names, eliminating the need for manual mapping:
+         * 
+         *     Name = productDto.Name,
+         *     Description = productDto.Description,
+         *     Price = productDto.Price,
+         *     PictureUrl = productDto.PictureUrl,
+         *     Type = productDto.Type,
+         *     Brand = productDto.Brand,
+         *     QuantityInStock = productDto.QuantityInStock
+         * 
+         * The mapping configuration is defined in MappingProfiles.cs
+         */
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
-        {
+
+        {  //using automapper to map the productDto to a product
             var product = mapper.Map<Product>(productDto);
+            //add the product to the database
             context.Products.Add(product);
+            //save the changes to the database and check if it was successful
             var result = await context.SaveChangesAsync() > 0;
+            //if the changes were successful, return the created product
             if (result) return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            //if the changes were not successful, return a bad request
             return BadRequest(new ProblemDetails { Title = "Problem creating product" });
         }
     }

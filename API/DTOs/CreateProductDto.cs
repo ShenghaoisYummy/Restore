@@ -2,6 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs;
 
+/*
+ * Dto is a data transfer object, it is used to transfer data between the client and the server
+ * it is used to validate the data that is sent to the server
+ * it is like a gatekeeper between the client and the server
+ */
 public class CreateProductDto
 {
     [Required]
