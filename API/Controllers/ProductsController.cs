@@ -76,7 +76,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
 
-        {  //using automapper to map the productDto to a product
+        {  // create a new product and using automapper to map the productDto to a product
             var product = mapper.Map<Product>(productDto);
             //add the product to the database
             context.Products.Add(product);
@@ -86,6 +86,24 @@ namespace API.Controllers
             if (result) return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
             //if the changes were not successful, return a bad request
             return BadRequest(new ProblemDetails { Title = "Problem creating product" });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<Product>> UpdateProduct(UpdateProductDto updateProductDto)
+        {
+            // find the product to update
+            var product = await context.Products.FindAsync(updateProductDto.Id);
+            // if the product is not found, return a not found response
+            if (product == null) return NotFound();
+            // map the updateProductDto to the product
+            mapper.Map(updateProductDto, product);
+            // save the changes to the database and check if it was successful
+            var result = await context.SaveChangesAsync() > 0;
+            // if the changes were successful, return the updated product
+            if (result) return Ok(product);
+            // if the changes were not successful, return a bad request
+            return BadRequest(new ProblemDetails { Title = "Problem updating product" });
         }
     }
 }

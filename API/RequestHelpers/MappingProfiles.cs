@@ -1,7 +1,6 @@
 using AutoMapper;
 using API.DTOs;
 using API.Entities;
-using AutoMapper;
 
 namespace API.RequestHelpers
 {
@@ -10,6 +9,7 @@ namespace API.RequestHelpers
         public MappingProfiles()
         {
             CreateMap<CreateProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
         }
     }
 }
