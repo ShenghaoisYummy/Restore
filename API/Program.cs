@@ -4,8 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using API.Middleware;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
+using API.RequestHelpers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("Cloudinary"));
 
 // Add MVC controllers to the dependency injection container.
 // This enables the application to handle HTTP requests through controller actions.
