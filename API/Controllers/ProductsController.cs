@@ -104,6 +104,21 @@ namespace API.Controllers
             if (result) return Ok(product);
             // if the changes were not successful, return a bad request
             return BadRequest(new ProblemDetails { Title = "Problem updating product" });
+        } 
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProduct(int id)
+        {
+            // find the product to delete
+            var product = await context.Products.FindAsync(id);
+            // if the product is not found, return a not found response
+            if (product == null) return NotFound();
+            // remove the product from the database
+            context.Products.Remove(product);
+            var result = await context.SaveChangesAsync() > 0;
+            if (result) return Ok();
+            return BadRequest(new ProblemDetails { Title = "Problem deleting product" });
         }
     }
 }
