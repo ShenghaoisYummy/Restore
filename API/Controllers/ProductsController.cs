@@ -119,6 +119,23 @@ namespace API.Controllers
             // map the updateProductDto to the product
             mapper.Map(updateProductDto, product);
 
+            if (updateProductDto.File != null)
+            {
+                var imageResult = await imageService.AddImageAsync(updateProductDto.File);
+                if (imageResult.Error != null)
+                {
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                }
+
+                if (!string.IsNullOrEmpty(product.PublicId))
+                {
+                    await imageService.DeleteImageAsync(product.PublicId);
+                }
+
+                product.PictureUrl = imageResult.SecureUrl.AbsoluteUri;
+                product.PublicId = imageResult.PublicId;
+            }
+
             // save the changes to the database and check if it was successful
             var result = await context.SaveChangesAsync() > 0;
 
@@ -138,6 +155,11 @@ namespace API.Controllers
 
             // if the product is not found, return a not found response
             if (product == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(product.PublicId))
+            {
+                await imageService.DeleteImageAsync(product.PublicId);
+            }
 
             // remove the product from the database
             context.Products.Remove(product);
