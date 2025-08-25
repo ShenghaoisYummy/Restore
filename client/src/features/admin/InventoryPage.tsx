@@ -20,6 +20,7 @@ export default function InventoryPage() {
   /* 
    * get product params from redux store catalogSlice
    * the productParams looks like this:
+   * 
      const initialState: ProductParams = {
        pageNumber: 1,        // Start on page 1
        pageSize: 8,          // Show 8 products per page
@@ -29,7 +30,7 @@ export default function InventoryPage() {
        orderBy: "name",      // Sort by name initially
      };
    * use useFetchProductsQuery to get products data ordered by name:
-     
+    * 
          {
              items: Product[],      // Array of products
              pagination: {          // Pagination info
