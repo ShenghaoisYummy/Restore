@@ -50,6 +50,7 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 // This service is responsible for handling payments through Stripe
 // It is scoped to the request, so it can be used throughout the request lifecycle
 builder.Services.AddScoped<PaymentsService>();
+builder.Services.AddScoped<ImageService>();
 
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {
