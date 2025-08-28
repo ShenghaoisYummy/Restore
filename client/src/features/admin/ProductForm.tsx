@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   createProductSchema,
@@ -12,6 +12,7 @@ import {
   Button,
   Grid2,
 } from "@mui/material";
+import AppTextInput from "../../app/shared/components/AppTextInput";
 
 export default function ProductForm() {
   const { control, handleSubmit } = useForm<CreateProductSchema>({
@@ -34,13 +35,7 @@ export default function ProductForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid2 container spacing={3}>
           <Grid2 size={12}>
-            <Controller
-              control={control}
-              name="name"
-              render={({ field }) => (
-                <TextField {...field} label="Name" fullWidth />
-              )}
-            />
+            <AppTextInput control={control} name="name" label="Product name" />
           </Grid2>
         </Grid2>
         <Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>
