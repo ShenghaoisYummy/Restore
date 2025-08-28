@@ -37,6 +37,40 @@ export default function ProductForm() {
           <Grid2 size={12}>
             <AppTextInput control={control} name="name" label="Product name" />
           </Grid2>
+          <Grid2 size={6}>
+            <AppTextInput control={control} name="brand" label="Brand" />
+          </Grid2>{" "}
+          <Grid2 size={6}>
+            <AppTextInput control={control} name="type" label="Type" />
+          </Grid2>{" "}
+          <Grid2 size={6}>
+            <AppTextInput
+              type="number"
+              control={control}
+              name="price"
+              label="Price"
+            />
+          </Grid2>{" "}
+          <Grid2 size={6}>
+            <AppTextInput
+              type="number"
+              control={control}
+              name="quantityInStock"
+              label="Quantity in Stock"
+            />
+          </Grid2>{" "}
+          <Grid2 size={12}>
+            <AppTextInput
+              control={control}
+              multiline
+              rows={4}
+              name="description"
+              label="Description"
+            />
+          </Grid2>{" "}
+          <Grid2 size={12}>
+            <AppTextInput control={control} name="file" label="Image" />
+          </Grid2>{" "}
         </Grid2>
         <Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>
           <Button variant="contained" color="inherit">
