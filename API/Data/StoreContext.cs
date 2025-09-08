@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 
 
 namespace API.Data;
-
+/** Entity Framework Core DbContext for database
+*   Database Tables(DbSets): represent the tables in the database
+*/
 public class StoreContext(DbContextOptions options) : IdentityDbContext<User>(options)
 {
     public required DbSet<Product> Products { get; set; }
@@ -26,4 +28,3 @@ public class StoreContext(DbContextOptions options) : IdentityDbContext<User>(op
         );
     }
 }
- 

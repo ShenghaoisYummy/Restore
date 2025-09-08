@@ -13,6 +13,8 @@ import {
   Grid2,
 } from "@mui/material";
 import AppTextInput from "../../app/shared/components/AppTextInput";
+import AppSelectInput from "../../app/shared/components/AppSelectInput";
+import { useFetchFiltersQuery } from "../catalog/catalogApi";
 
 export default function ProductForm() {
   const { control, handleSubmit } = useForm<CreateProductSchema>({
@@ -22,6 +24,8 @@ export default function ProductForm() {
       name: "",
     },
   });
+
+  const { data } = useFetchFiltersQuery();
 
   const onSubmit = (data: CreateProductSchema) => {
     console.log(data);
@@ -38,10 +42,24 @@ export default function ProductForm() {
             <AppTextInput control={control} name="name" label="Product name" />
           </Grid2>
           <Grid2 size={6}>
-            <AppTextInput control={control} name="brand" label="Brand" />
+            {data?.brands && (
+              <AppSelectInput
+                control={control}
+                name="brand"
+                label="Brand"
+                items={data.brands}
+              />
+            )}
           </Grid2>{" "}
           <Grid2 size={6}>
-            <AppTextInput control={control} name="type" label="Type" />
+              {data?.types && (
+                <AppSelectInput
+                  control={control}
+                  name="type"
+                  label="Type"
+                  items={data.types}
+                />
+              )}
           </Grid2>{" "}
           <Grid2 size={6}>
             <AppTextInput

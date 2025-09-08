@@ -26,6 +26,7 @@ export const createProductSchema = z.object({
   quantityInStock: z
     .number({ error: "Quantity is required" })
     .min(1, "Quantity must be at least 1"),
+  file: z.instanceof(File, { message: "File is required" }),
 });
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
