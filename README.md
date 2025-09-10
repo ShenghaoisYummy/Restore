@@ -6,6 +6,10 @@ A modern e-commerce web application built with .NET 9 Web API backend and React 
 
 - **Frontend**: [https://restore-austin.azurewebsites.net](https://restore-austin.azurewebsites.net)
 - **API**: Deployed on Azure App Service
+- 
+## Preview
+
+<img width="1460" height="756" alt="Screenshot 2025-09-10 at 13 23 16" src="https://github.com/user-attachments/assets/27476470-ca1d-4efb-9ea3-db690f537515" />
 
 ## 🛠️ Tech Stack
 
